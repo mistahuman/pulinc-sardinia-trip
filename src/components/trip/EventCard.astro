@@ -3,6 +3,8 @@ import { ChevronRight, Clock, MapPin, Navigation, StickyNote, Ticket } from 'luc
 import { EVENT_META, accentFor, startTime, type EventType } from '@lib/eventMeta';
 
 interface Props {
+  /** Anchor the calendar links to. */
+  anchor?: string;
   type: EventType;
   title: string;
   time?: string;
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const {
+  anchor,
   type,
   title,
   time,
@@ -48,7 +51,8 @@ const rows = [
 ---
 
 <Tag
-  class="group card preset-filled-surface-100-900 border border-surface-300-700 overflow-hidden transition-colors hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)]"
+  id={anchor}
+  class="group card preset-filled-surface-100-900 border border-surface-300-700 overflow-hidden scroll-mt-24 transition-colors hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)] target:border-[color-mix(in_oklab,var(--accent)_75%,transparent)]"
   style={`--accent: ${accent}`}
 >
   <SummaryTag

@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://mistahuman.github.io/pulinc-trip',
-  base: '/pulinc-trip/',
+  site: 'https://mistahuman.github.io/pulinc-sardinia-trip',
+  base: '/pulinc-sardinia-trip/',
   output: 'static',
   integrations: [svelte()],
   vite: {

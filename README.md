@@ -1,7 +1,7 @@
 # PULINC · Sardinia 2026
 
 Trip site for the Pulinc — Sardinia, August 2026.
-Live at [mistahuman.github.io/pulinc-trip](https://mistahuman.github.io/pulinc-trip/).
+Live at [mistahuman.github.io/pulinc-sardinia-trip](https://mistahuman.github.io/pulinc-sardinia-trip/).
 
 Astro 6 · Svelte 5 · Skeleton 4 · Tailwind 4. Static, deployed to GitHub Pages on
 every push to `main`. Built on
@@ -42,7 +42,7 @@ Types: `partenza` `traghetto` `trasferimento` `ritorno` `hotel` `villa`
 a bad field; icons and colours per type are in `src/lib/eventMeta.ts`.
 
 Itinerary and calendar read the same files, so one markdown updates both. Days
-with nothing planned still show up as "Da decidere". Trip dates live in
+with nothing planned still show up as "Chill". Trip dates live in
 `src/lib/trip.ts`.
 
 ## Notes

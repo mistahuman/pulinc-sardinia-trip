@@ -1,13 +1,14 @@
 ---
-import Countdown from '@components/trip/Countdown.svelte';
+import TripCountdown from '@components/trip/TripCountdown.svelte';
 import Logo from '@components/generic/Logo.astro';
 import { TRIP_RANGE } from '@lib/trip';
 
 interface Props {
   start: string;
+  end: string;
 }
 
-const { start } = Astro.props;
+const { start, end } = Astro.props;
 ---
 
 <section class="px-4 pt-10 pb-14 text-center xl:px-8 xl:pt-16">
@@ -19,7 +20,7 @@ const { start } = Astro.props;
       <span
         class="block text-[clamp(1.5rem,6.5vw,3rem)] tracking-[0.02em] text-primary-700 dark:text-primary-300"
       >
-        in Sardegna
+        Sardinia Trip
       </span>
     </h1>
 
@@ -28,7 +29,7 @@ const { start } = Astro.props;
     </p>
 
     <div class="mt-12">
-      <Countdown target={start} client:load />
+      <TripCountdown start={start} end={end} client:load />
     </div>
   </div>
 </section>

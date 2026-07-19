@@ -22,6 +22,11 @@ export function dayAnchor(isoDate: string): string {
   return `giorno-${isoDate}`;
 }
 
+/** Same idea, one step finer: the calendar links to the exact card. */
+export function eventAnchor(id: string): string {
+  return `evento-${id}`;
+}
+
 /**
  * The itinerary, sorted and bucketed by day. Every day of the trip gets a
  * bucket even when empty, so the plan's holes stay visible instead of

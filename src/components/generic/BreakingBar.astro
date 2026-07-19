@@ -1,0 +1,59 @@
+---
+// Fixed ticker at the bottom of the page. Adding or removing a headline is a
+// file in src/content/breaking — nothing else to touch.
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('breaking');
+
+// Rough width of the headline row: IBM Plex Mono advances 0.6em, so at 12px a
+// character takes ~7.2px, and every divider adds its own margins.
+const textWidth = items.reduce((sum, item) => sum + item.data.text.length * 7.2, 0);
+const rowWidth = textWidth + Math.max(0, items.length - 1) * 46;
+
+// The row crosses a whole screen plus its own width. Scaling the duration with
+// that distance keeps the reading speed the same however many headlines pile up.
+const duration = Math.min(90, Math.max(12, (1280 + rowWidth) / 100));
+---
+
+{
+  items.length > 0 && (
+    <div class="fixed inset-x-0 bottom-0 z-50 flex h-9 items-stretch border-t border-surface-500/20 bg-surface-950 text-surface-50 dark:bg-surface-50 dark:text-surface-950">
+      <span class="flex shrink-0 items-center bg-secondary-500 px-3 font-mono-trip text-[0.62rem] font-medium uppercase tracking-[0.18em] text-surface-950">
+        Breaking
+      </span>
+      <div class="flex flex-1 items-center overflow-hidden">
+        <div
+          class="breaking-track flex shrink-0 items-center whitespace-nowrap font-mono-trip text-xs"
+          style={`animation-duration: ${duration}s`}
+        >
+          {items.map((item, index) => (
+            <Fragment>
+              {index > 0 && (
+                <span
+                  class="mx-5 size-1.5 shrink-0 rotate-45 bg-secondary-500"
+                  aria-hidden="true"
+                />
+              )}
+              <span>{item.data.text}</span>
+            </Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .breaking-track {
+    animation-name: breaking-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .breaking-track {
+      animation: none;
+    }
+  }
+</style>

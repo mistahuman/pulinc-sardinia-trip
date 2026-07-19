@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import Layout from '@layouts/Layout.astro';
 import EventCard from '@components/trip/EventCard.astro';
 import { dayParts } from '@lib/eventMeta';
-import { dayAnchor, loadItinerary, TRIP_RANGE } from '@lib/trip';
+import { dayAnchor, eventAnchor, loadItinerary, TRIP_RANGE } from '@lib/trip';
 
 const { events, days, byDay } = await loadItinerary();
 
@@ -19,7 +19,7 @@ const rendered = new Map(
 ---
 
 <Layout
-  title="Itinerario · PULINC in Sardegna"
+  title="Itinerario · PULINC Sardinia Trip"
   description={`Itinerario del viaggio, ${TRIP_RANGE}.`}
 >
   <section class="px-4 py-8 xl:px-8">
@@ -64,7 +64,7 @@ const rendered = new Map(
 
                   {dayEvents.length === 0 ? (
                     <p class="mt-2 rounded-base border border-dashed border-surface-500/30 px-3.5 py-3 font-mono-trip text-xs opacity-60">
-                      Da decidere
+                      Chill
                     </p>
                   ) : (
                     <div class="mt-2 space-y-2.5">
@@ -74,6 +74,7 @@ const rendered = new Map(
                         const hasBody = Boolean(event.rendered?.html?.trim());
                         return (
                           <EventCard
+                            anchor={eventAnchor(event.id)}
                             type={event.data.type}
                             title={event.data.title}
                             time={event.data.time}
@@ -98,4 +99,16 @@ const rendered = new Map(
       </ol>
     </div>
   </section>
+
+  <script>
+    // Arriving from the calendar lands on a collapsed card, which reads as
+    // "nothing happened". Open the one that was linked to.
+    function openTargetCard() {
+      const target = document.querySelector(':target');
+      if (target instanceof HTMLDetailsElement) target.open = true;
+    }
+
+    openTargetCard();
+    window.addEventListener('hashchange', openTargetCard);
+  </script>
 </Layout>

@@ -1,6 +1,6 @@
 ---
 date: '2026-08-11'
-type: 'hotel'
-title: 'Arrivo ad Alghero'
+type: 'alloggio'
+title: 'Arrivo Hotel Alghero'
 notes: 'Indirizzo hotel da definire'
 ---

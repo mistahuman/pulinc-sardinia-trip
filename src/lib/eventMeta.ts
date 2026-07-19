@@ -1,13 +1,4 @@
-import {
-  Luggage,
-  Ship,
-  Car,
-  House,
-  Hotel,
-  BedDouble,
-  UtensilsCrossed,
-  Umbrella,
-} from 'lucide-svelte';
+import { Ship, Car, BedDouble, UtensilsCrossed, Umbrella, Compass, Cake } from 'lucide-svelte';
 import type { EVENT_TYPES } from '../content.config';
 
 export type EventType = (typeof EVENT_TYPES)[number];
@@ -32,14 +23,13 @@ export interface EventMeta {
 }
 
 export const EVENT_META: Record<EventType, EventMeta> = {
-  partenza: { icon: Luggage, label: 'Partenza', family: 'movimento' },
+  viaggio: { icon: Car, label: 'Viaggio', family: 'movimento' },
   traghetto: { icon: Ship, label: 'Traghetto', family: 'movimento' },
-  trasferimento: { icon: Car, label: 'Trasferimento', family: 'movimento' },
-  ritorno: { icon: House, label: 'Ritorno', family: 'movimento' },
-  hotel: { icon: Hotel, label: 'Hotel', family: 'sosta' },
-  villa: { icon: BedDouble, label: 'Villa', family: 'sosta' },
+  alloggio: { icon: BedDouble, label: 'Alloggio', family: 'sosta' },
   ristorante: { icon: UtensilsCrossed, label: 'Ristorante', family: 'sosta' },
-  attivita: { icon: Umbrella, label: 'Attività', family: 'sosta' },
+  spiaggia: { icon: Umbrella, label: 'Spiaggia', family: 'sosta' },
+  attivita: { icon: Compass, label: 'Attività', family: 'sosta' },
+  compleanno: { icon: Cake, label: 'Compleanno', family: 'sosta' },
 };
 
 export function accentFor(type: EventType): string {
@@ -49,14 +39,14 @@ export function accentFor(type: EventType): string {
 // Events without an explicit time still need to fall in a sensible spot in the
 // day: you leave in the morning, eat in the evening, check in at the end.
 const DEFAULT_SLOT: Record<EventType, string> = {
-  partenza: '06:00',
-  trasferimento: '09:00',
+  // Not an appointment but a fact about the whole day, so it opens it.
+  compleanno: '00:00',
+  viaggio: '09:00',
   traghetto: '10:00',
-  attivita: '11:00',
+  spiaggia: '11:00',
+  attivita: '15:00',
   ristorante: '20:00',
-  hotel: '21:00',
-  villa: '21:00',
-  ritorno: '23:00',
+  alloggio: '21:00',
 };
 
 export function sortKey(type: EventType, time?: string): string {

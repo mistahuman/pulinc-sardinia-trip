@@ -1,14 +1,62 @@
 ---
+import { getCollection } from 'astro:content';
+import { Square, SquareCheckBig, SquareX } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
 import Section from '@components/generic/Section.astro';
 import { CREST_SIZE, CRESTS, crestUrl } from '@lib/crests';
 
 const base = import.meta.env.BASE_URL;
+
+// Icon and colour already carry the outcome — a lost challenge is red and
+// crossed out, a won one green and ticked. No text label repeating it.
+const STATUS_META = {
+  open: {
+    icon: Square,
+    card: 'preset-filled-surface-100-900 border-surface-300-700',
+    iconColor: 'text-surface-500',
+  },
+  won: {
+    icon: SquareCheckBig,
+    card: 'border-success-500/40 bg-success-500/10',
+    iconColor: 'text-success-700 dark:text-success-300',
+  },
+  lost: {
+    icon: SquareX,
+    card: 'border-error-500/40 bg-error-500/10',
+    iconColor: 'text-error-700 dark:text-error-300',
+  },
+} as const;
+
+// Challenges still in play go on top: they're the only ones left to act on.
+const STATUS_ORDER = { open: 0, won: 1, lost: 2 };
+
+// Updated by hand, by changing `status` in the file under src/content/sfide.
+const challenges = (await getCollection('sfide')).sort(
+  (a, b) => STATUS_ORDER[a.data.status] - STATUS_ORDER[b.data.status],
+);
+const wonCount = challenges.filter((challenge) => challenge.data.status === 'won').length;
 ---
 
 <Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
   <section class="px-4 py-10 xl:px-8">
     <div class="container mx-auto max-w-4xl space-y-12">
+      <Section title="Sfide" note={`${wonCount} / ${challenges.length}`}>
+        <ul class="m-0 list-none space-y-2 p-0">
+          {
+            challenges.map((challenge) => {
+              const meta = STATUS_META[challenge.data.status];
+              const Icon = meta.icon;
+              return (
+                <li class:list={['card flex items-start gap-3 border p-3.5', meta.card]}>
+                  <Icon size={18} class:list={['mt-0.5 shrink-0', meta.iconColor]} />
+                  <span class="min-w-0 flex-1 text-pretty">{challenge.data.text}</span>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </Section>
+
       <Section title="Logo">
         <div class="grid gap-4 sm:grid-cols-2">
           {

@@ -66,3 +66,18 @@ body {
 .accent-tint {
   background-color: color-mix(in oklab, var(--accent) 14%, transparent);
 }
+
+/* Breaking ticker ------------------------------------------------------ */
+/* The headline row starts one screen to the right and leaves past its own left
+   edge, so it always enters from the right. These keyframes live here rather
+   than in BreakingBar.astro because the scoped-style pipeline was dropping the
+   block in dev, which left the row frozen. */
+
+@keyframes breaking-scroll {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

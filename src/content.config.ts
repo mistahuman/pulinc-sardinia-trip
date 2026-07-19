@@ -3,14 +3,13 @@ import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 export const EVENT_TYPES = [
-  'partenza',
+  'viaggio',
   'traghetto',
-  'trasferimento',
-  'hotel',
-  'villa',
+  'alloggio',
   'ristorante',
+  'spiaggia',
   'attivita',
-  'ritorno',
+  'compleanno',
 ] as const;
 
 const itinerary = defineCollection({
@@ -29,4 +28,21 @@ const itinerary = defineCollection({
   }),
 });
 
-export const collections = { itinerary };
+export const CHALLENGE_STATUSES = ['open', 'won', 'lost'] as const;
+
+const sfide = defineCollection({
+  loader: glob({ base: './src/content/sfide', pattern: '**/*.md' }),
+  schema: z.object({
+    text: z.string(),
+    status: z.enum(CHALLENGE_STATUSES).default('open'),
+  }),
+});
+
+const breaking = defineCollection({
+  loader: glob({ base: './src/content/breaking', pattern: '**/*.md' }),
+  schema: z.object({
+    text: z.string(),
+  }),
+});
+
+export const collections = { itinerary, sfide, breaking };

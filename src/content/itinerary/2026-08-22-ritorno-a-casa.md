@@ -1,5 +1,5 @@
 ---
 date: '2026-08-22'
-type: 'ritorno'
+type: 'viaggio'
 title: 'Ritorno a casa'
 ---
