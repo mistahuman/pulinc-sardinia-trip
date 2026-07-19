@@ -1,0 +1,22 @@
+---
+import LayoutRoot from '@layouts/LayoutRoot.astro';
+import Header from '@components/generic/Header.astro';
+import Footer from '@components/generic/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<LayoutRoot title={title} description={description}>
+  <div class="grid min-h-screen grid-rows-[auto_1fr_auto] max-w-full">
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</LayoutRoot>

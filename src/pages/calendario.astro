@@ -1,0 +1,78 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { EVENT_META, accentFor, dayParts, startTime } from '@lib/eventMeta';
+import { loadItinerary, TRIP_RANGE } from '@lib/trip';
+
+const { days, byDay } = await loadItinerary();
+---
+
+<Layout
+  title="Calendario · PULINC in Sardegna"
+  description={`Calendario del viaggio, ${TRIP_RANGE}.`}
+>
+  <section class="px-4 py-8 xl:px-8">
+    <div
+      class="container mx-auto grid max-w-screen-xl gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+      {
+        days.map((day) => {
+          const events = byDay.get(day) ?? [];
+          const parts = dayParts(day);
+
+          return (
+            <article
+              class:list={[
+                'card flex flex-col gap-3 rounded-container border p-4',
+                events.length === 0
+                  ? 'border-dashed border-surface-500/35'
+                  : 'preset-filled-surface-100-900 border-surface-300-700',
+              ]}
+            >
+              <h2 class="flex items-baseline gap-2">
+                <span class="font-display text-3xl leading-none tabular-nums text-surface-950 dark:text-surface-50">
+                  {parts.num}
+                </span>
+                <span class="font-mono-trip text-[0.62rem] uppercase tracking-[0.18em] opacity-55">
+                  {parts.weekdayFull}
+                </span>
+              </h2>
+
+              {events.length === 0 ? (
+                <p class="font-mono-trip text-xs opacity-45">Da decidere</p>
+              ) : (
+                <ul class="flex flex-col gap-2.5 p-0">
+                  {events.map((event) => {
+                    const meta = EVENT_META[event.data.type];
+                    const Icon = meta.icon;
+                    const start = startTime(event.data.time);
+                    return (
+                      <li
+                        class="flex items-start gap-2.5"
+                        style={`--accent: ${accentFor(event.data.type)}`}
+                      >
+                        <span class="accent-tint accent-text mt-0.5 grid size-7 shrink-0 place-items-center rounded-base">
+                          <Icon size={15} />
+                          <span class="sr-only">{meta.label}</span>
+                        </span>
+                        <span class="min-w-0 flex-1">
+                          <span class="block text-sm leading-snug">
+                            {event.data.shortTitle ?? event.data.title}
+                          </span>
+                          {start && (
+                            <span class="mt-0.5 block font-mono-trip text-[0.68rem] tabular-nums opacity-55">
+                              {event.data.time}
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+</Layout>

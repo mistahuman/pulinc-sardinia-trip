@@ -1,0 +1,40 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Section from '@components/generic/Section.astro';
+import { CREST_SIZE, CRESTS, crestUrl } from '@lib/crests';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
+  <section class="px-4 py-10 xl:px-8">
+    <div class="container mx-auto max-w-4xl space-y-12">
+      <Section title="Logo">
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            CRESTS.map((crest) => (
+              <figure class="card preset-filled-surface-100-900 m-0 flex flex-col gap-4 border border-surface-300-700 p-5">
+                <div class="flex min-h-56 items-center justify-center sm:min-h-72">
+                  <img
+                    src={crestUrl(base, crest.slug)}
+                    width={CREST_SIZE.width}
+                    height={CREST_SIZE.height}
+                    alt={`Pulinc — Logo v${crest.version}`}
+                    loading="lazy"
+                    decoding="async"
+                    class="h-52 w-auto object-contain sm:h-64"
+                  />
+                </div>
+                <figcaption class="border-t border-surface-500/20 pt-3">
+                  <span class="font-mono-trip text-[0.68rem] tracking-[0.14em] tabular-nums opacity-60">
+                    v{crest.version}
+                  </span>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </Section>
+    </div>
+  </section>
+</Layout>

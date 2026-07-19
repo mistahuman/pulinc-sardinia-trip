@@ -1,0 +1,75 @@
+---
+// Components
+import Drawer from '@components/generic/Drawer.astro';
+import Logo from '@components/generic/Logo.astro';
+import Lightswitch from '@components/generic/Lightswitch.astro';
+// Icons
+import { Github } from 'lucide-svelte';
+
+const base = import.meta.env.BASE_URL;
+const coreLinks = [
+  { href: base, label: 'home', target: '_self' },
+  { href: `${base}itinerario`, label: 'itinerario', target: '_self' },
+  { href: `${base}calendario`, label: 'calendario', target: '_self' },
+  { href: `${base}bacheca`, label: 'bacheca', target: '_self' },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-surface-500/20 bg-surface-50/85 dark:bg-surface-950/85 backdrop-blur w-full h-[70px] flex items-center"
+>
+  <div
+    class="container mx-auto grid max-w-screen-xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 xl:px-8"
+  >
+    <!-- Left -->
+    <div class="flex items-stretch justify-start gap-3">
+      <!-- Mobile Nav Drawer -->
+      <Drawer navigation={coreLinks} />
+      <!-- Logo -->
+      <a class="flex items-center gap-2.5 no-underline" href={base} title="Pulinc">
+        <Logo class="h-9 w-auto" />
+        <span class="flex flex-col leading-none">
+          <span
+            class="font-display text-2xl tracking-[0.14em] text-surface-950 dark:text-surface-50"
+            >PULINC</span
+          >
+          <span
+            class="font-mono-trip text-[0.6rem] tracking-[0.22em] uppercase text-surface-600 dark:text-surface-400"
+            >Sardegna '26</span
+          >
+        </span>
+      </a>
+      <!-- Navigation -->
+      <div class="hidden xl:flex items-center">
+        {
+          coreLinks.slice(1).map((link) => (
+            <a class="btn hover:preset-tonal" href={link.href} target={link.target}>
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <!-- Middle -->
+    <div class="flex items-center gap-2"></div>
+    <!-- Right -->
+    <div class="flex justify-end items-stretch gap-2">
+      <!-- Mode -->
+      <Lightswitch />
+      <!-- Divider -->
+      <span class="border-r border-surface-200-800"></span>
+      <!-- Social -->
+      <nav class="flex items-center gap-1">
+        <a
+          class="btn-icon hover:preset-tonal"
+          href="https://github.com/mistahuman/pulinc-trip"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Repo su GitHub"
+        >
+          <Github size={20} />
+        </a>
+      </nav>
+    </div>
+  </div>
+</header>

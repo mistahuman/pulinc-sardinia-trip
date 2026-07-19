@@ -1,0 +1,24 @@
+---
+// Una sezione della bacheca: etichetta in monospaziato, filetto, contenuto.
+// Aggiungerne una nuova è un blocco <Section title="FOTO"> e basta.
+interface Props {
+  title: string;
+  note?: string;
+}
+
+const { title, note } = Astro.props;
+---
+
+<section class="space-y-4">
+  <header class="flex items-baseline gap-3">
+    <h2
+      class="font-mono-trip text-xs uppercase tracking-[0.22em] whitespace-nowrap text-surface-950 dark:text-surface-50"
+    >
+      {title}
+    </h2>
+    {note && <span class="font-mono-trip text-[0.68rem] opacity-55">{note}</span>}
+    <span class="h-px flex-1 bg-surface-500/25"></span>
+  </header>
+
+  <slot />
+</section>

@@ -1,0 +1,148 @@
+---
+import { ChevronRight, Clock, MapPin, Navigation, StickyNote, Ticket } from 'lucide-svelte';
+import { EVENT_META, accentFor, startTime, type EventType } from '@lib/eventMeta';
+
+interface Props {
+  type: EventType;
+  title: string;
+  time?: string;
+  location?: string;
+  address?: string;
+  mapsLink?: string;
+  bookingLink?: string;
+  notes?: string;
+  hasBody?: boolean;
+}
+
+const {
+  type,
+  title,
+  time,
+  location,
+  address,
+  mapsLink,
+  bookingLink,
+  notes,
+  hasBody = false,
+} = Astro.props;
+
+const meta = EVENT_META[type];
+const Icon = meta.icon;
+const accent = accentFor(type);
+const start = startTime(time);
+
+// Nothing to reveal? Then it shouldn't pretend to expand.
+const hasDetails = Boolean(
+  time || location || address || mapsLink || bookingLink || notes || hasBody,
+);
+
+const Tag = hasDetails ? 'details' : 'div';
+const SummaryTag = hasDetails ? 'summary' : 'div';
+
+const rows = [
+  { key: 'Orario', value: time, icon: Clock, mono: true },
+  { key: 'Luogo', value: location, icon: MapPin, mono: false },
+  { key: 'Indirizzo', value: address, icon: Navigation, mono: false },
+  { key: 'Note', value: notes, icon: StickyNote, mono: false },
+].filter((row) => Boolean(row.value));
+---
+
+<Tag
+  class="group card preset-filled-surface-100-900 border border-surface-300-700 overflow-hidden transition-colors hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)]"
+  style={`--accent: ${accent}`}
+>
+  <SummaryTag
+    class:list={[
+      'flex items-start gap-3 p-3.5 list-none [&::-webkit-details-marker]:hidden',
+      hasDetails && 'cursor-pointer',
+    ]}
+  >
+    <!-- Type icon -->
+    <span class="accent-tint accent-text grid size-10 shrink-0 place-items-center rounded-base">
+      <Icon size={20} />
+    </span>
+
+    <!-- Title block -->
+    <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+      <span
+        class="accent-text font-mono-trip text-[0.62rem] uppercase tracking-[0.16em] leading-none"
+      >
+        {meta.label}
+      </span>
+      <span class="font-semibold leading-snug text-pretty">{title}</span>
+    </span>
+
+    <!-- Time + caret -->
+    <span class="flex shrink-0 items-center gap-2 pt-1">
+      {
+        start && (
+          <span class="font-mono-trip text-sm tabular-nums text-surface-700-300">{start}</span>
+        )
+      }
+      {
+        hasDetails && (
+          <ChevronRight
+            size={18}
+            class="text-surface-500 transition-transform group-open:rotate-90"
+          />
+        )
+      }
+    </span>
+  </SummaryTag>
+
+  {
+    hasDetails && (
+      <div class="border-t border-dashed border-surface-300-700 px-3.5 py-3 space-y-2.5">
+        <dl class="space-y-2">
+          {rows.map((row) => {
+            const RowIcon = row.icon;
+            return (
+              <div class="grid grid-cols-[1.25rem_5rem_1fr] items-start gap-2 text-sm">
+                <dt class="contents">
+                  <RowIcon size={15} class="mt-1 text-surface-500" />
+                  <span class="font-mono-trip text-[0.62rem] uppercase tracking-[0.14em] text-surface-600-400 mt-1">
+                    {row.key}
+                  </span>
+                </dt>
+                <dd class:list={['m-0', row.mono && 'font-mono-trip tabular-nums']}>{row.value}</dd>
+              </div>
+            );
+          })}
+        </dl>
+
+        {hasBody && (
+          <div class="text-sm opacity-90 [&>p]:my-1">
+            <slot />
+          </div>
+        )}
+
+        {(mapsLink || bookingLink) && (
+          <div class="flex flex-wrap gap-2 pt-1">
+            {mapsLink && (
+              <a
+                class="btn btn-sm preset-outlined-surface-500 font-mono-trip text-[0.68rem] uppercase tracking-[0.1em]"
+                href={mapsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MapPin size={14} />
+                <span>Google Maps</span>
+              </a>
+            )}
+            {bookingLink && (
+              <a
+                class="btn btn-sm preset-outlined-surface-500 font-mono-trip text-[0.68rem] uppercase tracking-[0.1em]"
+                href={bookingLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Ticket size={14} />
+                <span>Prenotazione</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+</Tag>

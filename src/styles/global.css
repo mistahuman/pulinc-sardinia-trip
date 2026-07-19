@@ -1,0 +1,68 @@
+@import 'tailwindcss';
+
+@import '@skeletonlabs/skeleton';
+@import './pulinc-theme.css';
+
+@source '../../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+/* Set Selector dark mode strategy */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+/* Global Styles */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  /* Su carta chiara le due velature si leggono come luce; su fondo scuro la
+     stessa dose di sabbia vira tutto sull'arancione, quindi lì si alleggerisce
+     e resta soprattutto il cobalto. */
+  --glow-primary: 14%;
+  --glow-tertiary: 12%;
+  background-attachment: fixed;
+  /* prettier-ignore */
+  background-image:
+    radial-gradient(at 8% 0%, color-mix(in oklab, var(--color-primary-500) var(--glow-primary), transparent) 0px, transparent 45%),
+    radial-gradient(at 95% 12%, color-mix(in oklab, var(--color-tertiary-500) var(--glow-tertiary), transparent) 0px, transparent 40%);
+}
+
+[data-mode='dark'] body {
+  --glow-primary: 10%;
+  --glow-tertiary: 4%;
+}
+
+/* Local Utilities --- */
+
+.flex-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.font-display {
+  font-family: var(--heading-font-family);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.font-mono-trip {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Timeline accent ------------------------------------------------------ */
+/* Every event card sets --accent inline from its type family; these
+   utilities read it so the colour lives in one place per card. */
+
+.accent-text {
+  color: var(--accent);
+}
+.accent-bg {
+  background-color: var(--accent);
+}
+.accent-border {
+  border-color: var(--accent);
+}
+.accent-tint {
+  background-color: color-mix(in oklab, var(--accent) 14%, transparent);
+}

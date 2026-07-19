@@ -1,0 +1,25 @@
+---
+// Lo stemma disegnato a mano dei Pulinc.
+import { CREST_SIZE, CURRENT_CREST, crestUrl } from '@lib/crests';
+
+interface Props {
+  width?: string | number;
+  height?: string | number;
+  class?: string;
+}
+
+// Intrinsic size keeps the aspect ratio honest and reserves the right box
+// before the image loads. Size it with classes instead.
+const { width = CREST_SIZE.width, height = CREST_SIZE.height, class: classList = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<img
+  src={crestUrl(base, CURRENT_CREST.slug)}
+  width={width}
+  height={height}
+  alt="Pulinc"
+  loading="eager"
+  decoding="async"
+  class:list={['object-contain', classList]}
+/>

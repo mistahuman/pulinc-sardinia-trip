@@ -1,0 +1,64 @@
+---
+import '@styles/global.css';
+import '@fontsource/big-shoulders-display/700';
+import '@fontsource/big-shoulders-display/800';
+import '@fontsource/karla/400';
+import '@fontsource/karla/600';
+import '@fontsource/ibm-plex-mono/400';
+import '@fontsource/ibm-plex-mono/500';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'PULINC in Sardegna · Agosto 2026',
+  description = "L'itinerario dei Pulinc in Sardegna, agosto 2026.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="it" data-theme="pulinc">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}favicon.png`} />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.png`} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+    <!-- Mode -->
+    <script is:inline>
+      function applyMode(document) {
+        const storedMode = localStorage.getItem('mode');
+        const preferredMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+        const mode = storedMode ?? preferredMode ?? 'light';
+        document.documentElement.setAttribute('data-mode', mode);
+      }
+
+      applyMode(document);
+
+      document.addEventListener('astro:before-swap', (event) => {
+        applyMode(event.newDocument);
+      });
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+  }
+</style>

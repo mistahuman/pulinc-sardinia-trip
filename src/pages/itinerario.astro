@@ -1,0 +1,101 @@
+---
+import { render } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import EventCard from '@components/trip/EventCard.astro';
+import { dayParts } from '@lib/eventMeta';
+import { dayAnchor, loadItinerary, TRIP_RANGE } from '@lib/trip';
+
+const { events, days, byDay } = await loadItinerary();
+
+// Render markdown bodies up front: components can't await inside the template.
+const rendered = new Map(
+  await Promise.all(
+    events.map(async (event) => {
+      const { Content } = await render(event);
+      return [event.id, Content] as const;
+    }),
+  ),
+);
+---
+
+<Layout
+  title="Itinerario · PULINC in Sardegna"
+  description={`Itinerario del viaggio, ${TRIP_RANGE}.`}
+>
+  <section class="px-4 py-8 xl:px-8">
+    <div class="container mx-auto max-w-screen-xl">
+      <ol class="list-none space-y-0 p-0">
+        {
+          days.map((day, index) => {
+            const dayEvents = byDay.get(day) ?? [];
+            const parts = dayParts(day);
+            const isLast = index === days.length - 1;
+
+            return (
+              <li
+                id={dayAnchor(day)}
+                class="scroll-mt-20 grid grid-cols-[2.75rem_1fr] gap-x-4 xl:grid-cols-[3.5rem_1fr] xl:gap-x-6"
+              >
+                {/* Rail */}
+                <div class="flex flex-col items-center" aria-hidden="true">
+                  <span class="grid size-11 shrink-0 place-items-center rounded-base bg-surface-950 font-mono-trip text-sm font-medium tabular-nums text-surface-50 dark:bg-surface-50 dark:text-surface-950 xl:size-14 xl:text-base">
+                    {parts.num}
+                  </span>
+                  <span
+                    class:list={[
+                      'w-px flex-1',
+                      isLast
+                        ? 'bg-gradient-to-b from-surface-500/30 to-transparent'
+                        : 'bg-surface-500/30',
+                    ]}
+                  />
+                </div>
+
+                {/* Day */}
+                <div class="min-w-0 pb-8">
+                  <h2 class="flex h-11 items-baseline gap-2.5 xl:h-14">
+                    <span class="font-mono-trip text-[0.68rem] uppercase tracking-[0.2em] text-primary-700 dark:text-primary-300">
+                      {parts.weekday}
+                    </span>
+                    <span class="font-display text-2xl text-surface-950 dark:text-surface-50 xl:text-3xl">
+                      {parts.num} {parts.month}
+                    </span>
+                  </h2>
+
+                  {dayEvents.length === 0 ? (
+                    <p class="mt-2 rounded-base border border-dashed border-surface-500/30 px-3.5 py-3 font-mono-trip text-xs opacity-60">
+                      Da decidere
+                    </p>
+                  ) : (
+                    <div class="mt-2 space-y-2.5">
+                      {dayEvents.map((event) => {
+                        const Content = rendered.get(event.id)!;
+                        // The glob loader stores rendered html, not the raw body.
+                        const hasBody = Boolean(event.rendered?.html?.trim());
+                        return (
+                          <EventCard
+                            type={event.data.type}
+                            title={event.data.title}
+                            time={event.data.time}
+                            location={event.data.location}
+                            address={event.data.address}
+                            mapsLink={event.data.mapsLink}
+                            bookingLink={event.data.bookingLink}
+                            notes={event.data.notes}
+                            hasBody={hasBody}
+                          >
+                            {hasBody && <Content />}
+                          </EventCard>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </section>
+</Layout>

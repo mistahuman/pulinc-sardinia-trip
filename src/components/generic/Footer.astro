@@ -1,0 +1,20 @@
+---
+const { classList = 'p-4' } = Astro.props;
+---
+
+<footer class:list={['border-t border-surface-500/20', classList]}>
+  <div
+    class="container mx-auto max-w-screen-xl flex flex-col xl:flex-row justify-between items-center gap-4"
+  >
+    <div class="flex items-center gap-4">
+      <p class="text-xs opacity-60">
+        built by <a class="underline" href="https://www.github.com/mistahuman" target="_blank"
+          >mistahuman</a
+        >.
+      </p>
+    </div>
+    <p class="font-display text-3xl tracking-[0.14em] text-surface-950 dark:text-surface-50">
+      PULINC
+    </p>
+  </div>
+</footer>
