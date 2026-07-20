@@ -1,0 +1,33 @@
+---
+import Layout from '@layouts/Layout.astro';
+import SpotExplorer from '@components/trip/SpotExplorer.svelte';
+import { SPOT_CATEGORIES, SPOT_ZONES } from '../content.config';
+import { zoneForDate } from '@lib/spots';
+import { loadAnchors, loadSpots } from '@lib/spotsData';
+
+const spots = await loadSpots();
+const anchors = await loadAnchors();
+
+// The site is statically built, so "today" is the build date. That's enough:
+// the deploy runs on every push, and being one zone off before departure costs
+// a single tap. Doing it client-side would flash the wrong zone first.
+const initialZone = zoneForDate(new Date().toISOString().slice(0, 10));
+---
+
+<Layout
+  title="Mappa · PULINC Sardinia Trip"
+  description="Spiagge, calette, ristoranti e bar papabili, filtrabili per zona e vicinanza."
+>
+  <section class="px-4 py-6 xl:px-8">
+    <div class="container mx-auto max-w-screen-xl">
+      <SpotExplorer
+        client:load
+        {spots}
+        {anchors}
+        {initialZone}
+        categories={[...SPOT_CATEGORIES]}
+        zones={[...SPOT_ZONES]}
+      />
+    </div>
+  </section>
+</Layout>

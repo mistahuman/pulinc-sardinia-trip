@@ -1,0 +1,182 @@
+# Posti caldi papabili, da consultare al volo nei giorni chill.
+#
+# COME AGGIUNGERNE UNO (anche dal telefono, da github.com):
+#   copia un blocco qui sotto, cambia i valori. Regole:
+#   - `id` unico, minuscolo, con trattini
+#   - due soli livelli di indentazione: `- id:` e due spazi per il resto
+#   - liste sempre in linea fra parentesi quadre, mai a capo
+#   - `coords` sono [latitudine, longitudine] — in Sardegna lat ~39-41, lng ~8-9
+#     (se le inverti la build fallisce, non finisce online una cosa sbagliata)
+#
+# category: spiaggia | caletta | ristorante | bar | vista | attivita
+# zone:     alghero | cagliari
+# drive:    minuti d'auto dalla base di quella zona
+#
+# ATTENZIONE: le coordinate qui sotto sono di primo impianto e vanno
+# ricontrollate su Maps una per una prima di fidarsene sul posto.
+
+# --- Zona Alghero (11-14 agosto) ---------------------------------------------
+
+- id: la-pelosa
+  name: La Pelosa
+  category: spiaggia
+  zone: alghero
+  coords: [40.9308, 8.2065]
+  drive: 55
+  tags: [sabbia-bianca, acqua-bassa, cartolina]
+  caveat: 'Accesso a numero chiuso e a pagamento: va prenotato online in anticipo'
+  notes: "Quella delle foto, con la torre. D'agosto senza prenotazione non si entra."
+
+- id: le-bombarde
+  name: Spiaggia delle Bombarde
+  category: spiaggia
+  zone: alghero
+  coords: [40.5878, 8.2472]
+  drive: 15
+  tags: [sabbia, pineta, servizi]
+  notes: 'La più comoda da Alghero. Si riempie presto, meglio la mattina.'
+
+- id: lazzaretto
+  name: Spiaggia del Lazzaretto
+  category: spiaggia
+  zone: alghero
+  coords: [40.5934, 8.2545]
+  drive: 15
+  tags: [sabbia, calette, servizi]
+  notes: 'Accanto alle Bombarde, divisa in più anse: se una è piena si scala.'
+
+- id: cala-dragunara
+  name: Cala Dragunara
+  category: caletta
+  zone: alghero
+  coords: [40.5843, 8.1876]
+  drive: 30
+  tags: [scogli, porticciolo, snorkeling]
+  notes: 'Piccola, sotto Capo Caccia. Da qui partono le barche per le Grotte.'
+
+- id: porto-ferro
+  name: Porto Ferro
+  category: spiaggia
+  zone: alghero
+  coords: [40.6739, 8.2032]
+  drive: 30
+  tags: [sabbia-rossa, onde, selvaggia]
+  caveat: 'Poca ombra e mare mosso quando tira il maestrale'
+
+- id: capo-caccia
+  name: Capo Caccia — Escala del Cabirol
+  category: vista
+  zone: alghero
+  coords: [40.5606, 8.1697]
+  drive: 35
+  tags: [scogliera, tramonto, panorama]
+  caveat: '654 scalini per scendere alle Grotte di Nettuno, e poi vanno risaliti'
+  notes: 'Anche solo il piazzale in cima vale il giro. Da fare al tramonto.'
+
+- id: bosa-marina
+  name: Bosa Marina
+  category: spiaggia
+  zone: alghero
+  coords: [40.2861, 8.4772]
+  drive: 60
+  tags: [sabbia, borgo, giornata-intera]
+  notes: 'La strada costiera Alghero-Bosa è il pezzo forte, non la spiaggia.'
+
+- id: sa-mandra
+  name: Agriturismo Sa Mandra
+  category: ristorante
+  zone: alghero
+  coords: [40.6316, 8.2884]
+  drive: 15
+  tags: [agriturismo, cucina-sarda, gia-prenotato]
+  notes: 'Già in itinerario per la cena del 12.'
+  mapsLink: 'https://maps.app.goo.gl/9Uc5uVxFiZMjg7Gv6'
+
+# --- Zona Cagliari / Maracalagonis (14-21 agosto) -----------------------------
+
+- id: solanas
+  name: Spiaggia di Solanas
+  category: spiaggia
+  zone: cagliari
+  coords: [39.1608, 9.3167]
+  drive: 20
+  tags: [sabbia, servizi, comoda]
+  notes: 'La più vicina alla villa. Buon ripiego quando non si ha voglia di guidare.'
+
+- id: mari-pintau
+  name: Mari Pintau
+  category: caletta
+  zone: cagliari
+  coords: [39.1725, 9.2586]
+  drive: 15
+  tags: [ciottoli, acqua-trasparente, snorkeling]
+  caveat: 'Ciottoli, non sabbia: scarpette da scoglio consigliate'
+
+- id: cala-regina
+  name: Cala Regina
+  category: caletta
+  zone: cagliari
+  coords: [39.1808, 9.2361]
+  drive: 15
+  tags: [ciottoli, piccola, torre]
+
+- id: torre-delle-stelle
+  name: Torre delle Stelle
+  category: spiaggia
+  zone: cagliari
+  coords: [39.1447, 9.3475]
+  drive: 25
+  tags: [sabbia, granito, calette]
+
+- id: punta-molentis
+  name: Punta Molentis
+  category: caletta
+  zone: cagliari
+  coords: [39.1053, 9.5589]
+  drive: 50
+  tags: [sabbia, granito, cartolina]
+  caveat: 'Accesso contingentato a pagamento in alta stagione'
+
+- id: simius
+  name: Spiaggia del Simius
+  category: spiaggia
+  zone: cagliari
+  coords: [39.1264, 9.5325]
+  drive: 45
+  tags: [sabbia-bianca, servizi, caraibica]
+  notes: 'Villasimius. Giornata intera, tanto vale fermarsi a cena lì.'
+
+- id: cala-pira
+  name: Cala Pira
+  category: caletta
+  zone: cagliari
+  coords: [39.0925, 9.5122]
+  drive: 55
+  tags: [sabbia, torre, pineta]
+
+- id: poetto
+  name: Il Poetto
+  category: spiaggia
+  zone: cagliari
+  coords: [39.2028, 9.1622]
+  drive: 30
+  tags: [sabbia, chioschi, vita-notturna]
+  notes: 'La spiaggia di Cagliari: 8 km di chioschi. Più serata che mare.'
+
+- id: sella-del-diavolo
+  name: Sella del Diavolo
+  category: attivita
+  zone: cagliari
+  coords: [39.1889, 9.1739]
+  drive: 30
+  tags: [trekking, panorama, gratis]
+  caveat: 'Ombra zero: da fare presto la mattina o al tramonto, non a mezzogiorno'
+
+- id: bastione-saint-remy
+  name: Bastione di Saint Remy
+  category: vista
+  zone: cagliari
+  coords: [39.2153, 9.1156]
+  drive: 30
+  tags: [centro-storico, terrazza, aperitivo]
+  notes: 'Il punto da cui si vede tutta Cagliari. Bar sulla terrazza.'
