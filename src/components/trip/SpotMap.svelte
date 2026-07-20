@@ -25,7 +25,11 @@
   let L: typeof import('leaflet') | null = null;
   let map: LeafletMap | null = null;
   let tiles: TileLayer | null = null;
-  let markers = new globalThis.Map<string, Marker>();
+  // A plain lookup table, not state: nothing renders from it, the effects below
+  // read it only to decide which Leaflet markers to add or drop. A SvelteMap
+  // here would buy reactivity nobody subscribes to.
+  // eslint-disable-next-line svelte/prefer-svelte-reactivity
+  const markers = new globalThis.Map<string, Marker>();
   let userMarker: Marker | null = null;
   let ready = $state(false);
 
@@ -168,7 +172,12 @@
       return;
     }
     userMarker = L.marker(userPos, {
-      icon: L.divIcon({ html: '<span class="spot-me"></span>', className: 'spot-pin-wrap', iconSize: [18, 18], iconAnchor: [9, 9] }),
+      icon: L.divIcon({
+        html: '<span class="spot-me"></span>',
+        className: 'spot-pin-wrap',
+        iconSize: [18, 18],
+        iconAnchor: [9, 9],
+      }),
       interactive: false,
       zIndexOffset: 1000,
     }).addTo(map);

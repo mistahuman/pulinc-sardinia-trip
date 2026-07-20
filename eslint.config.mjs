@@ -37,6 +37,15 @@ export default [
         parser: tsparser,
       },
     },
+    plugins: { '@typescript-eslint': tseslint },
+    rules: {
+      // Base ESLint reads the parameter names inside a TypeScript function type
+      // (`onSelect: (id: string) => void`) as unused variables. The TS-aware
+      // rule understands they're part of the annotation — same swap the .ts
+      // block above already gets from the recommended preset.
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
   },
   // Astro files
   ...astro.configs.recommended,

@@ -50,7 +50,9 @@
           {formatDistance(distance)}
         </span>
       {:else if spot.drive}
-        <span class="flex items-center gap-1 font-mono-trip text-sm tabular-nums text-surface-600-400">
+        <span
+          class="flex items-center gap-1 font-mono-trip text-sm tabular-nums text-surface-600-400"
+        >
           <Car size={14} />{spot.drive}′
         </span>
       {/if}
@@ -92,7 +94,8 @@
       {/if}
       <a
         class="btn btn-sm preset-outlined-surface-500 ml-auto font-mono-trip text-[0.68rem] uppercase tracking-[0.1em]"
-        href={spot.mapsLink ?? `https://www.google.com/maps/dir/?api=1&destination=${spot.coords[0]},${spot.coords[1]}`}
+        href={spot.mapsLink ??
+          `https://www.google.com/maps/dir/?api=1&destination=${spot.coords[0]},${spot.coords[1]}`}
         target="_blank"
         rel="noopener noreferrer"
       >

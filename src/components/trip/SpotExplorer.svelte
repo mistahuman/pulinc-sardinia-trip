@@ -1,5 +1,6 @@
 <script lang="ts">
   import { LocateFixed, X } from 'lucide-svelte';
+  import { SvelteSet } from 'svelte/reactivity';
   import SpotMap from './SpotMap.svelte';
   import SpotCard from './SpotCard.svelte';
   import { SPOT_META, ZONE_LABEL, type SpotCategory, type SpotZone } from '@lib/spotMeta';
@@ -17,7 +18,8 @@
   const { spots, anchors, initialZone, categories, zones }: Props = $props();
 
   let zone = $state<SpotZone | 'tutte'>(initialZone);
-  let active = $state<Set<SpotCategory>>(new Set());
+  // Reactive on its own, so it can be mutated in place instead of reassigned.
+  const active = new SvelteSet<SpotCategory>();
   let selectedId = $state<string | null>(null);
   let userPos = $state<Coords | null>(null);
   let geo = $state<'idle' | 'asking' | 'denied'>('idle');
@@ -31,9 +33,7 @@
       active.size === 0 ? byZone : byZone.filter((spot) => active.has(spot.category));
     if (!userPos) return filtered;
     const here = userPos;
-    return [...filtered].sort(
-      (a, b) => distanceKm(here, a.coords) - distanceKm(here, b.coords),
-    );
+    return [...filtered].sort((a, b) => distanceKm(here, a.coords) - distanceKm(here, b.coords));
   });
 
   // Only offer a chip if something in this zone actually uses it: an empty
@@ -51,10 +51,8 @@
   );
 
   function toggle(category: SpotCategory) {
-    const next = new Set(active);
-    if (next.has(category)) next.delete(category);
-    else next.add(category);
-    active = next;
+    if (active.has(category)) active.delete(category);
+    else active.add(category);
   }
 
   function select(id: string) {
@@ -155,7 +153,7 @@
           <button
             type="button"
             class="btn btn-sm preset-outlined-surface-500 font-mono-trip text-[0.68rem] uppercase tracking-[0.1em]"
-            onclick={() => (active = new Set())}
+            onclick={() => active.clear()}
           >
             <X size={14} />
           </button>
@@ -190,7 +188,9 @@
           />
         </li>
       {:else}
-        <li class="rounded-base border border-dashed border-surface-500/30 px-3.5 py-6 text-center font-mono-trip text-xs opacity-60">
+        <li
+          class="rounded-base border border-dashed border-surface-500/30 px-3.5 py-6 text-center font-mono-trip text-xs opacity-60"
+        >
           Niente con questi filtri
         </li>
       {/each}
