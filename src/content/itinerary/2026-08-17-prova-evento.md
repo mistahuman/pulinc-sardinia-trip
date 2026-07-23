@@ -1,6 +1,6 @@
 ---
 date: '2026-08-17'
-type: 'ristorante'
+type: 'food'
 title: 'Cena sugli scogli'
 shortTitle: 'Cena sugli scogli'
 location: 'bshd'

@@ -1,5 +1,5 @@
 ---
 date: '2026-08-16'
-type: 'compleanno'
+type: 'birthday'
 title: 'Complex Vents'
 ---

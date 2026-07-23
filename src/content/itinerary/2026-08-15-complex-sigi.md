@@ -1,5 +1,5 @@
 ---
 date: '2026-08-15'
-type: 'compleanno'
+type: 'birthday'
 title: 'Complex Sigi'
 ---

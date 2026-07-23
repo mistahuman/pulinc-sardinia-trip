@@ -1,6 +1,6 @@
 ---
 date: '2026-08-11'
-type: 'traghetto'
+type: 'ferry'
 title: 'Traghetto: Livorno - Olbia'
 shortTitle: 'Livorno → Olbia'
 location: 'Traghetto Livorno Darsena Toscana'

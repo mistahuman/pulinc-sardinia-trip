@@ -3,50 +3,45 @@ import type { EVENT_TYPES } from '../content.config';
 
 export type EventType = (typeof EVENT_TYPES)[number];
 
-// Each type belongs to a family, and the family is what carries the colour.
-// Two families, not one per type: the icon and the label already say what kind
-// of stop it is, so a third encoding just adds noise. What colour is left to
-// say is the one thing you scan a trip for — am I moving, or am I staying put.
-// Both tints come from the crest; colours come from the Skeleton theme so light
-// and dark mode stay in sync for free.
-export type EventFamily = 'movimento' | 'sosta';
-
-export const FAMILY_ACCENT: Record<EventFamily, string> = {
-  movimento: 'var(--color-primary-500)', // cobalto della fascia
-  sosta: 'var(--color-tertiary-600)', // seppia dell'inchiostro
-};
+// Each type carries its own colour, except travel and ferry: those are the same
+// act — you are on your way — so a second hue there would split what the eye
+// should read as one thing. Six accents, not seven.
+// The values live in global.css as --accent-* tokens: each needs a different
+// shade per mode to stay legible, which a value pinned here could not express.
+export type EventAccent = 'transit' | 'stay' | 'food' | 'beach' | 'activity' | 'birthday';
 
 export interface EventMeta {
   icon: typeof Ship;
   label: string;
-  family: EventFamily;
+  accent: EventAccent;
 }
 
+// Keys are English, labels are Italian: the key is code, the label is content.
 export const EVENT_META: Record<EventType, EventMeta> = {
-  viaggio: { icon: Car, label: 'Viaggio', family: 'movimento' },
-  traghetto: { icon: Ship, label: 'Traghetto', family: 'movimento' },
-  alloggio: { icon: BedDouble, label: 'Alloggio', family: 'sosta' },
-  ristorante: { icon: UtensilsCrossed, label: 'Ristorante', family: 'sosta' },
-  spiaggia: { icon: Umbrella, label: 'Spiaggia', family: 'sosta' },
-  attivita: { icon: Compass, label: 'Attività', family: 'sosta' },
-  compleanno: { icon: Cake, label: 'Compleanno', family: 'sosta' },
+  travel: { icon: Car, label: 'Viaggio', accent: 'transit' },
+  ferry: { icon: Ship, label: 'Traghetto', accent: 'transit' },
+  stay: { icon: BedDouble, label: 'Alloggio', accent: 'stay' },
+  food: { icon: UtensilsCrossed, label: 'Ristorante', accent: 'food' },
+  beach: { icon: Umbrella, label: 'Spiaggia', accent: 'beach' },
+  activity: { icon: Compass, label: 'Attività', accent: 'activity' },
+  birthday: { icon: Cake, label: 'Compleanno', accent: 'birthday' },
 };
 
 export function accentFor(type: EventType): string {
-  return FAMILY_ACCENT[EVENT_META[type].family];
+  return `var(--accent-${EVENT_META[type].accent})`;
 }
 
 // Events without an explicit time still need to fall in a sensible spot in the
 // day: you leave in the morning, eat in the evening, check in at the end.
 const DEFAULT_SLOT: Record<EventType, string> = {
   // Not an appointment but a fact about the whole day, so it opens it.
-  compleanno: '00:00',
-  viaggio: '09:00',
-  traghetto: '10:00',
-  spiaggia: '11:00',
-  attivita: '15:00',
-  ristorante: '20:00',
-  alloggio: '21:00',
+  birthday: '00:00',
+  travel: '09:00',
+  ferry: '10:00',
+  beach: '11:00',
+  activity: '15:00',
+  food: '20:00',
+  stay: '21:00',
 };
 
 export function sortKey(type: EventType, time?: string): string {
