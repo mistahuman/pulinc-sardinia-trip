@@ -1,5 +1,5 @@
 ---
-import { ChevronRight, Clock, MapPin, Navigation, StickyNote, Ticket } from 'lucide-svelte';
+import { ChevronRight, Clock, Info, MapPin, Navigation, StickyNote } from 'lucide-svelte';
 import { EVENT_META, accentFor, startTime, type EventType } from '@lib/eventMeta';
 
 interface Props {
@@ -11,7 +11,8 @@ interface Props {
   location?: string;
   address?: string;
   mapsLink?: string;
-  bookingLink?: string;
+  /** Anything worth reading before going: an official page, a schedule, a menu. */
+  infoLink?: string;
   notes?: string;
   hasBody?: boolean;
 }
@@ -24,7 +25,7 @@ const {
   location,
   address,
   mapsLink,
-  bookingLink,
+  infoLink,
   notes,
   hasBody = false,
 } = Astro.props;
@@ -36,7 +37,7 @@ const start = startTime(time);
 
 // Nothing to reveal? Then it shouldn't pretend to expand.
 const hasDetails = Boolean(
-  time || location || address || mapsLink || bookingLink || notes || hasBody,
+  time || location || address || mapsLink || infoLink || notes || hasBody,
 );
 
 const Tag = hasDetails ? 'details' : 'div';
@@ -120,7 +121,7 @@ const rows = [
           </div>
         )}
 
-        {(mapsLink || bookingLink) && (
+        {(mapsLink || infoLink) && (
           <div class="flex flex-wrap gap-2 pt-1">
             {mapsLink && (
               <a
@@ -133,15 +134,15 @@ const rows = [
                 <span>Google Maps</span>
               </a>
             )}
-            {bookingLink && (
+            {infoLink && (
               <a
                 class="btn btn-sm preset-outlined-surface-500 font-mono-trip text-[0.68rem] uppercase tracking-[0.1em]"
-                href={bookingLink}
+                href={infoLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Ticket size={14} />
-                <span>Prenotazione</span>
+                <Info size={14} />
+                <span>Info</span>
               </a>
             )}
           </div>

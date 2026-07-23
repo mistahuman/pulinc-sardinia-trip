@@ -3,13 +3,13 @@ import { z } from 'zod';
 import { glob } from 'astro/loaders';
 
 export const EVENT_TYPES = [
-  'viaggio',
-  'traghetto',
-  'alloggio',
-  'ristorante',
-  'spiaggia',
-  'attivita',
-  'compleanno',
+  'travel',
+  'ferry',
+  'stay',
+  'food',
+  'beach',
+  'activity',
+  'birthday',
 ] as const;
 
 const itinerary = defineCollection({
@@ -23,7 +23,7 @@ const itinerary = defineCollection({
     location: z.string().optional(),
     address: z.string().optional(),
     mapsLink: z.string().optional(),
-    bookingLink: z.string().optional(),
+    infoLink: z.string().optional(),
     notes: z.string().optional(),
   }),
 });

@@ -7,6 +7,13 @@ import '@fontsource/karla/600';
 import '@fontsource/ibm-plex-mono/400';
 import '@fontsource/ibm-plex-mono/500';
 
+// Preloaded below: without these the browser only discovers the @font-face
+// rules after fetching and parsing the stylesheet, so the first paint uses
+// the fallback font and visibly swaps. Only the two faces used above the
+// fold are preloaded — preloading all of them would just move the contention.
+import fontHeading from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-800-normal.woff2?url';
+import fontBody from '@fontsource/karla/files/karla-latin-400-normal.woff2?url';
+
 interface Props {
   title?: string;
   description?: string;
@@ -21,6 +28,8 @@ const { title = 'PULINC SARDINIA TRIP', description = 'Tutti i PULINC in viaggio
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="preload" href={fontHeading} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fontBody} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}favicon.png`} />
     <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}favicon.png`} />
     <meta name="generator" content={Astro.generator} />

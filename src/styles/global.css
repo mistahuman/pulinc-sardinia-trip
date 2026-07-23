@@ -41,7 +41,7 @@ body {
 }
 
 .font-display {
-  font-family: var(--heading-font-family);
+  font-family: var(--typo-heading--font-family);
   font-weight: 800;
   letter-spacing: 0.01em;
 }
@@ -51,8 +51,34 @@ body {
 }
 
 /* Timeline accent ------------------------------------------------------ */
-/* Every event card sets --accent inline from its type family; these
-   utilities read it so the colour lives in one place per card. */
+/* One token per accent, because no single shade of the theme ramps works in
+   both modes: at 500 the label clears only 2.7:1 on a pale surface, and the
+   700 that fixes that falls to 1.9:1 once the surface goes black. So each
+   token is 700 in light and 400 in dark — both sides above 4.5:1.
+   Dark mode is driven by [data-mode], not prefers-color-scheme, so light-dark()
+   is not an option here.
+   Travel and ferry share one accent on purpose: they are the same act. */
+
+:root {
+  --accent-transit: var(--color-primary-700);
+  --accent-stay: var(--color-tertiary-700);
+  --accent-food: var(--color-secondary-700);
+  --accent-beach: var(--color-warning-700);
+  --accent-activity: var(--color-success-700);
+  --accent-birthday: var(--color-error-700);
+}
+
+[data-mode='dark'] {
+  --accent-transit: var(--color-primary-400);
+  --accent-stay: var(--color-tertiary-400);
+  --accent-food: var(--color-secondary-400);
+  --accent-beach: var(--color-warning-400);
+  --accent-activity: var(--color-success-400);
+  --accent-birthday: var(--color-error-400);
+}
+
+/* Every event card sets --accent inline from its type; these utilities read it
+   so the colour lives in one place per card. */
 
 .accent-text {
   color: var(--accent);

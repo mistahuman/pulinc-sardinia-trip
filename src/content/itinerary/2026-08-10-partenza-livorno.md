@@ -1,6 +1,6 @@
 ---
 date: '2026-08-10'
-type: 'viaggio'
+type: 'travel'
 title: 'Partenza per Livorno'
 notes: 'creazy'
 ---

@@ -1,6 +1,6 @@
 ---
 date: '2026-08-16'
-type: 'ristorante'
+type: 'food'
 title: 'Cena al Ristorante Da Barbara'
 shortTitle: 'Cena da Barbara'
 location: 'Ristorante Da Barbara di Asuni Lazzaro e C.'
