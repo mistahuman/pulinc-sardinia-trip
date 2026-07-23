@@ -7,7 +7,7 @@ same markdown files, so one stop updates both.
 
 ## Stack
 
-Astro 6 · Svelte 5 · Skeleton 4 · Tailwind 4
+Astro 6 · Svelte 5 · Skeleton 5 · Tailwind 4
 
 ## Run
 

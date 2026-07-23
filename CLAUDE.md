@@ -8,7 +8,6 @@ on every push to `main`.
 ```bash
 npm run dev
 npm run build    # astro check + build to ./dist
-npm run lint
 npm run format
 ```
 
