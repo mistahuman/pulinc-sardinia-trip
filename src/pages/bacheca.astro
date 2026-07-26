@@ -30,19 +30,13 @@ const STATUS_META = {
 // Challenges still in play go on top: they're the only ones left to act on.
 const STATUS_ORDER = { open: 0, won: 1, lost: 2 };
 
-// Updated by hand, by changing `status` in the file under src/content/sfide.
-const challenges = (await getCollection('sfide')).sort(
+// Updated by hand, by changing `status` in the file under src/content/challenges.
+const challenges = (await getCollection('challenges')).sort(
   (a, b) => STATUS_ORDER[a.data.status] - STATUS_ORDER[b.data.status],
 );
 const wonCount = challenges.filter((challenge) => challenge.data.status === 'won').length;
 
-// I posti papabili — spiagge, calette, ristoranti, bar — stanno in una lista
-// condivisa su Google Maps, non qui: lì si salvano in due tap dal telefono
-// mentre si è in giro, e ogni posto si porta dietro orari, foto e navigazione
-// che a mano non manterremmo mai. Questo è solo il segnalibro per ritrovarla.
-//
-// TODO: incollare il link — su Maps: Salvati → la lista → Condividi → Copia link.
-const SPOTS_LIST_URL = '';
+const SPOTS_LIST_URL = 'https://maps.app.goo.gl/vuQ6qZCC4jfhJCPp6?g_st=ac';
 ---
 
 <Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
@@ -81,7 +75,7 @@ const SPOTS_LIST_URL = '';
                 <span class="font-mono-trip text-[0.62rem] uppercase leading-none tracking-[0.16em] text-primary-700 dark:text-primary-300">
                   Lista condivisa
                 </span>
-                <span class="font-semibold leading-snug">Spiagge, calette, cene e baretti</span>
+                <span class="font-semibold leading-snug">PULINC Sardinia Trip</span>
               </span>
             </a>
           ) : (

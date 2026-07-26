@@ -7,7 +7,8 @@ on every push to `main`.
 
 ```bash
 npm run dev
-npm run build    # astro check + build to ./dist
+npm run check    # astro check — type errors only, NOT run by CI
+npm run build    # astro build to ./dist — this is what deploy.yml runs
 npm run format
 ```
 

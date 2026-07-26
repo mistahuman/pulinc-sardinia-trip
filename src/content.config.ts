@@ -30,8 +30,8 @@ const itinerary = defineCollection({
 
 export const CHALLENGE_STATUSES = ['open', 'won', 'lost'] as const;
 
-const sfide = defineCollection({
-  loader: glob({ base: './src/content/sfide', pattern: '**/*.md' }),
+const challenges = defineCollection({
+  loader: glob({ base: './src/content/challenges', pattern: '**/*.md' }),
   schema: z.object({
     text: z.string(),
     status: z.enum(CHALLENGE_STATUSES).default('open'),
@@ -45,4 +45,4 @@ const breaking = defineCollection({
   }),
 });
 
-export const collections = { itinerary, sfide, breaking };
+export const collections = { itinerary, challenges, breaking };
