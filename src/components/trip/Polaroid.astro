@@ -1,0 +1,54 @@
+---
+import { Image as ImageIcon } from 'lucide-svelte';
+
+interface Props {
+  /** Already-resolved URL. Left out, the frame is empty — a print not taken yet. */
+  src?: string;
+  /** The line written on the white border. Keep it to one line. */
+  caption?: string;
+  /** Falls back to the caption: a written line beats no description at all. */
+  alt?: string;
+  /** A CSS angle, e.g. "-1.6deg". See `tilt()` in @lib/gallery. */
+  tilt?: string;
+  class?: string;
+}
+
+const { src, caption, alt, tilt = '0deg', class: className = '' } = Astro.props;
+---
+
+{
+  /* The frame stays light in dark mode on purpose: `bg-surface-50` is a fixed
+    light token, not a mode-aware pair. A polaroid is a white object, not a
+    themed surface — follow the theme and it stops reading as a print. */
+}
+<figure
+  class:list={[
+    'm-0 rotate-[var(--tilt)] rounded-[2px] bg-surface-50 p-2.5 pb-8 shadow-md transition-transform duration-200 hover:rotate-0 hover:scale-[1.03]',
+    className,
+  ]}
+  style={`--tilt:${tilt}`}
+>
+  {
+    src ? (
+      <img
+        src={src}
+        alt={alt ?? caption ?? ''}
+        loading="lazy"
+        decoding="async"
+        class="block aspect-square w-full object-cover"
+      />
+    ) : (
+      <span class="grid aspect-square w-full place-items-center bg-surface-200" aria-hidden="true">
+        <ImageIcon size={22} class="text-surface-400" />
+      </span>
+    )
+  }
+
+  {
+    caption && (
+      <figcaption class="mt-2 truncate text-center font-mono-trip text-[0.6rem] text-surface-700">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

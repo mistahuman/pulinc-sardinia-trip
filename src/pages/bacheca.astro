@@ -3,7 +3,10 @@ import { getCollection } from 'astro:content';
 import { MapPin, Square, SquareCheckBig, SquareX } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
 import Section from '@components/generic/Section.astro';
+import Pitch from '@components/trip/Pitch.astro';
 import { CREST_SIZE, CRESTS, crestUrl } from '@lib/crests';
+import { spotifyEmbedUrl } from '@lib/spotify';
+import { loadTeam } from '@lib/team';
 
 const base = import.meta.env.BASE_URL;
 
@@ -37,6 +40,12 @@ const challenges = (await getCollection('challenges')).sort(
 const wonCount = challenges.filter((challenge) => challenge.data.status === 'won').length;
 
 const SPOTS_LIST_URL = 'https://maps.app.goo.gl/vuQ6qZCC4jfhJCPp6?g_st=ac';
+
+// Paste the share link straight out of Spotify; the embed URL is derived.
+const PLAYLIST_URL = 'https://open.spotify.com/playlist/3vcAqoGdOcI874WReVtEim?si=f6be104d10e54638';
+const playlistEmbed = spotifyEmbedUrl(PLAYLIST_URL);
+
+const { rows, bench, formation } = await loadTeam();
 ---
 
 <Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
@@ -57,6 +66,30 @@ const SPOTS_LIST_URL = 'https://maps.app.goo.gl/vuQ6qZCC4jfhJCPp6?g_st=ac';
             })
           }
         </ul>
+      </Section>
+
+      <Section title="Squadra" note={formation}>
+        <Pitch rows={rows} bench={bench} />
+      </Section>
+
+      <Section title="Playlist">
+        {
+          playlistEmbed ? (
+            <iframe
+              src={playlistEmbed}
+              title="Playlist PULINC su Spotify"
+              width="100%"
+              height="420"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              class="block w-full rounded-base border-0"
+            />
+          ) : (
+            <p class="m-0 rounded-base border border-dashed border-surface-500/30 px-3.5 py-3 font-mono-trip text-xs opacity-60">
+              Playlist da collegare
+            </p>
+          )
+        }
       </Section>
 
       <Section title="Google Maps">
