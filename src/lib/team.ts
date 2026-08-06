@@ -19,14 +19,6 @@ export interface PitchRow {
   players: TeamMember[];
 }
 
-export function memberSlug(member: TeamMember): string {
-  return `giocatore-${member.id}`;
-}
-
-export function shirtNumber(member: TeamMember): string {
-  return member.data.number ? String(member.data.number) : '—';
-}
-
 /**
  * The squad: numbered order, split into the rows of the pitch. Anyone without a
  * `position` is not dropped, they sit on the bench under the pitch — the module

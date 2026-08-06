@@ -7,6 +7,7 @@ export const PHOTOS_PER_DAY = 3;
 
 export interface GalleryPhoto {
   src: string;
+  caption?: string;
   alt?: string;
 }
 

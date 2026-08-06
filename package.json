@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "photos": "bash scripts/photos.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

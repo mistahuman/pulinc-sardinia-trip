@@ -1,0 +1,93 @@
+---
+import { CURRENT_CREST, crestUrl } from '@lib/crests';
+import { POSITION_LABEL, type PitchRow, type TeamMember } from '@lib/team';
+
+interface Props {
+  rows: PitchRow[];
+  /** Anyone without a `position`. Named under the pitch rather than dropped. */
+  bench?: TeamMember[];
+}
+
+const { rows, bench = [] } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+{
+  /* Markings are absolutely positioned under the formation, which is a plain
+    column of flex rows — so a different squad size just changes how many
+    markers share a row, with nothing to reposition by hand. */
+}
+<div
+  class="relative mx-auto aspect-[3/4] w-full max-w-xl overflow-hidden rounded-base border border-surface-500/25 bg-success-500/5"
+>
+  <div
+    class="absolute inset-0"
+    style="background-image: repeating-linear-gradient(180deg, color-mix(in oklab, var(--color-success-500) 5%, transparent) 0 12.5%, transparent 12.5% 25%);"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="absolute inset-0" aria-hidden="true">
+    {/* Halfway line and centre circle, with the crest for a centre spot */}
+    <span class="absolute inset-x-0 top-1/2 h-px bg-surface-500/25"></span>
+    <span
+      class="absolute left-1/2 top-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-surface-500/25"
+    >
+      <img
+        src={crestUrl(base, CURRENT_CREST.slug)}
+        alt=""
+        width="357"
+        height="440"
+        class="h-14 w-auto object-contain opacity-25"
+      />
+    </span>
+    {/* Penalty areas */}
+    <span
+      class="absolute left-1/2 top-0 h-[12%] w-[46%] -translate-x-1/2 border-x border-b border-surface-500/25"
+    ></span>
+    <span
+      class="absolute bottom-0 left-1/2 h-[12%] w-[46%] -translate-x-1/2 border-x border-t border-surface-500/25"
+    ></span>
+  </div>
+
+  <ol class="absolute inset-0 m-0 flex list-none flex-col p-3 sm:p-5">
+    {
+      rows.map((row) => (
+        <li class="flex flex-1 items-center justify-evenly">
+          {row.players.map((player) => (
+            <span class="flex flex-col items-center gap-1.5" title={POSITION_LABEL[row.position]}>
+              {/* The face when there is one, the number when there isn't. Both
+                  wear the same ring and the same size, so a squad only half
+                  photographed still reads as one line of markers. */}
+              {player.data.photo ? (
+                <img
+                  src={`${base}team/${player.data.photo}`}
+                  alt={player.data.name}
+                  loading="lazy"
+                  decoding="async"
+                  class="size-11 rounded-full border-2 border-surface-950 object-cover shadow-sm dark:border-surface-50 xl:size-12"
+                />
+              ) : (
+                <span class="grid size-11 place-items-center rounded-full bg-surface-950 font-mono-trip text-sm font-medium tabular-nums text-surface-50 shadow-sm dark:bg-surface-50 dark:text-surface-950 xl:size-12">
+                  {player.data.number}
+                </span>
+              )}
+              <span class="font-mono-trip text-[0.6rem] uppercase tracking-[0.12em] text-surface-950 dark:text-surface-50">
+                {/* `||`, not `??`: an empty nickname is a blank label. */}
+                {player.data.nickname || player.data.name}
+              </span>
+            </span>
+          ))}
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+{
+  bench.length > 0 && (
+    <p class="m-0 mt-3 rounded-base border border-dashed border-surface-500/30 px-3.5 py-3 font-mono-trip text-xs opacity-60">
+      In panchina: {bench.map((member) => member.data.name).join(', ')}
+    </p>
+  )
+}

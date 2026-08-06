@@ -57,6 +57,11 @@ const gallery = defineCollection({
         z.object({
           // File under public/photos/ — the page builds the URL from BASE_URL.
           src: z.string(),
+          // Written on the white border. Keep it to a line: it is a polaroid,
+          // not a caption block. A print with nothing written on it is fine.
+          caption: z.string().optional(),
+          // Description for anyone who can't see the photo. Falls back to the
+          // caption, which is usually close enough and always better than none.
           alt: z.string().optional(),
         }),
       )

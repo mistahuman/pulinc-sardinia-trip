@@ -3,8 +3,10 @@ import { getCollection } from 'astro:content';
 import { MapPin, Square, SquareCheckBig, SquareX } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
 import Section from '@components/generic/Section.astro';
+import Pitch from '@components/trip/Pitch.astro';
 import { CREST_SIZE, CRESTS, crestUrl } from '@lib/crests';
 import { spotifyEmbedUrl } from '@lib/spotify';
+import { loadTeam } from '@lib/team';
 
 const base = import.meta.env.BASE_URL;
 
@@ -42,6 +44,8 @@ const SPOTS_LIST_URL = 'https://maps.app.goo.gl/vuQ6qZCC4jfhJCPp6?g_st=ac';
 // Paste the share link straight out of Spotify; the embed URL is derived.
 const PLAYLIST_URL = 'https://open.spotify.com/playlist/3vcAqoGdOcI874WReVtEim?si=f6be104d10e54638';
 const playlistEmbed = spotifyEmbedUrl(PLAYLIST_URL);
+
+const { rows, bench, formation } = await loadTeam();
 ---
 
 <Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
@@ -62,6 +66,10 @@ const playlistEmbed = spotifyEmbedUrl(PLAYLIST_URL);
             })
           }
         </ul>
+      </Section>
+
+      <Section title="Squadra" note={formation}>
+        <Pitch rows={rows} bench={bench} />
       </Section>
 
       <Section title="Playlist">

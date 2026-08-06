@@ -1,6 +1,6 @@
 ---
-import { Image as ImageIcon } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
+import Polaroid from '@components/trip/Polaroid.astro';
 import { dayParts } from '@lib/eventMeta';
 import { loadGallery, photoUrl, tilt } from '@lib/gallery';
 import { TRIP_RANGE } from '@lib/trip';
@@ -45,33 +45,12 @@ const total = days.reduce((sum, day) => sum + day.filled, 0);
 
                 <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
                   {day.slots.map((slot, slotIndex) => (
-                    <figure
-                      class="m-0 rotate-[var(--tilt)] rounded-[2px] bg-surface-50 p-2.5 pb-8 shadow-md transition-transform duration-200 hover:rotate-0 hover:scale-[1.03]"
-                      style={`--tilt:${tilt(dayIndex, slotIndex)}`}
-                    >
-                      {slot ? (
-                        <img
-                          src={photoUrl(base, slot.src)}
-                          alt={slot.alt ?? `${parts.num} ${parts.month}`}
-                          loading="lazy"
-                          decoding="async"
-                          class="block aspect-square w-full object-cover"
-                        />
-                      ) : (
-                        <span
-                          class="grid aspect-square w-full place-items-center bg-surface-200"
-                          aria-hidden="true"
-                        >
-                          <ImageIcon size={22} class="text-surface-400" />
-                        </span>
-                      )}
-
-                      {slot?.alt && (
-                        <figcaption class="mt-2 truncate text-center font-mono-trip text-[0.6rem] text-surface-700">
-                          {slot.alt}
-                        </figcaption>
-                      )}
-                    </figure>
+                    <Polaroid
+                      src={slot ? photoUrl(base, slot.src) : undefined}
+                      caption={slot?.caption}
+                      alt={slot?.alt || slot?.caption || `${parts.num} ${parts.month}`}
+                      tilt={tilt(dayIndex, slotIndex)}
+                    />
                   ))}
                 </div>
               </li>
