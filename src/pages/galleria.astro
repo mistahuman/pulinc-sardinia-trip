@@ -1,0 +1,84 @@
+---
+import { Image as ImageIcon } from 'lucide-svelte';
+import Layout from '@layouts/Layout.astro';
+import { dayParts } from '@lib/eventMeta';
+import { loadGallery, photoUrl, tilt } from '@lib/gallery';
+import { TRIP_RANGE } from '@lib/trip';
+
+const base = import.meta.env.BASE_URL;
+const days = await loadGallery();
+const total = days.reduce((sum, day) => sum + day.filled, 0);
+---
+
+<Layout title="Galleria · PULINC Sardinia Trip" description={`Le foto del viaggio, ${TRIP_RANGE}.`}>
+  <section class="px-4 py-8 xl:px-8">
+    <div class="container mx-auto max-w-4xl">
+      <header class="mb-10 flex items-baseline gap-3">
+        <h1
+          class="font-mono-trip text-xs uppercase tracking-[0.22em] whitespace-nowrap text-surface-950 dark:text-surface-50"
+        >
+          Galleria
+        </h1>
+        <span class="font-mono-trip text-[0.68rem] tabular-nums opacity-55">{total} foto</span>
+        <span class="h-px flex-1 bg-surface-500/25"></span>
+      </header>
+
+      {
+        /* No rail here, unlike the itinerary: this is an album, not a plan. The
+          day is a caption over a handful of prints someone dropped on a table. */
+      }
+      <ol class="m-0 list-none space-y-12 p-0">
+        {
+          days.map((day, dayIndex) => {
+            const parts = dayParts(day.date);
+
+            return (
+              <li>
+                <h2 class="mb-4 flex items-baseline gap-2.5">
+                  <span class="font-display text-3xl leading-none text-surface-950 dark:text-surface-50">
+                    {parts.num}
+                  </span>
+                  <span class="font-mono-trip text-[0.68rem] uppercase tracking-[0.2em] text-primary-700 dark:text-primary-300">
+                    {parts.weekdayFull} {parts.month}
+                  </span>
+                </h2>
+
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
+                  {day.slots.map((slot, slotIndex) => (
+                    <figure
+                      class="m-0 rotate-[var(--tilt)] rounded-[2px] bg-surface-50 p-2.5 pb-8 shadow-md transition-transform duration-200 hover:rotate-0 hover:scale-[1.03]"
+                      style={`--tilt:${tilt(dayIndex, slotIndex)}`}
+                    >
+                      {slot ? (
+                        <img
+                          src={photoUrl(base, slot.src)}
+                          alt={slot.alt ?? `${parts.num} ${parts.month}`}
+                          loading="lazy"
+                          decoding="async"
+                          class="block aspect-square w-full object-cover"
+                        />
+                      ) : (
+                        <span
+                          class="grid aspect-square w-full place-items-center bg-surface-200"
+                          aria-hidden="true"
+                        >
+                          <ImageIcon size={22} class="text-surface-400" />
+                        </span>
+                      )}
+
+                      {slot?.alt && (
+                        <figcaption class="mt-2 truncate text-center font-mono-trip text-[0.6rem] text-surface-700">
+                          {slot.alt}
+                        </figcaption>
+                      )}
+                    </figure>
+                  ))}
+                </div>
+              </li>
+            );
+          })
+        }
+      </ol>
+    </div>
+  </section>
+</Layout>

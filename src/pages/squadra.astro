@@ -1,0 +1,186 @@
+---
+import { render } from 'astro:content';
+import { UserRound } from 'lucide-svelte';
+import Layout from '@layouts/Layout.astro';
+import { CURRENT_CREST, crestUrl } from '@lib/crests';
+import { loadTeam, memberSlug, POSITION_LABEL } from '@lib/team';
+
+const base = import.meta.env.BASE_URL;
+const { members, rows, bench, formation } = await loadTeam();
+
+// Render markdown bodies up front: the template can't await.
+const bios = new Map(
+  await Promise.all(
+    members.map(async (member) => {
+      const { Content } = await render(member);
+      return [member.id, Content] as const;
+    }),
+  ),
+);
+---
+
+<Layout title="Squadra · PULINC" description="I nove Pulinc in trasferta in Sardegna.">
+  <section class="px-4 py-10 xl:px-8">
+    <div class="container mx-auto max-w-4xl space-y-10">
+      <header class="flex items-baseline gap-3">
+        <h1
+          class="font-mono-trip text-xs uppercase tracking-[0.22em] whitespace-nowrap text-surface-950 dark:text-surface-50"
+        >
+          La squadra
+        </h1>
+        <span class="font-mono-trip text-[0.68rem] tabular-nums opacity-55">{formation}</span>
+        <span class="h-px flex-1 bg-surface-500/25"></span>
+      </header>
+
+      {
+        /* The pitch. Markings are absolutely positioned under the formation, which
+          is a plain column of flex rows — so a different squad size just changes
+          how many markers share a row, with nothing to reposition by hand. */
+      }
+      <div
+        class="relative mx-auto aspect-[3/4] w-full max-w-xl overflow-hidden rounded-base border border-surface-500/25 bg-success-500/5"
+      >
+        <div
+          class="absolute inset-0"
+          style="background-image: repeating-linear-gradient(180deg, color-mix(in oklab, var(--color-success-500) 5%, transparent) 0 12.5%, transparent 12.5% 25%);"
+          aria-hidden="true"
+        >
+        </div>
+
+        <div class="absolute inset-0" aria-hidden="true">
+          {/* Halfway line and centre circle, with the crest for a centre spot */}
+          <span class="absolute inset-x-0 top-1/2 h-px bg-surface-500/25"></span>
+          <span
+            class="absolute left-1/2 top-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-surface-500/25"
+          >
+            <img
+              src={crestUrl(base, CURRENT_CREST.slug)}
+              alt=""
+              width="357"
+              height="440"
+              class="h-14 w-auto object-contain opacity-25"
+            />
+          </span>
+          {/* Penalty areas */}
+          <span
+            class="absolute left-1/2 top-0 h-[12%] w-[46%] -translate-x-1/2 border-x border-b border-surface-500/25"
+          ></span>
+          <span
+            class="absolute bottom-0 left-1/2 h-[12%] w-[46%] -translate-x-1/2 border-x border-t border-surface-500/25"
+          ></span>
+        </div>
+
+        <ol class="absolute inset-0 m-0 flex list-none flex-col p-3 sm:p-5">
+          {
+            rows.map((row) => (
+              <li class="flex flex-1 items-center justify-evenly">
+                {row.players.map((player) => (
+                  <a
+                    href={`#${memberSlug(player)}`}
+                    class="flex flex-col items-center gap-1.5 no-underline"
+                    title={POSITION_LABEL[row.position]}
+                  >
+                    {/* The face when there is one, the number when there isn't.
+                        Both wear the same ring and the same size, so a squad
+                        half photographed still reads as one line of markers. */}
+                    {player.data.photo ? (
+                      <img
+                        src={`${base}team/${player.data.photo}`}
+                        alt={player.data.name}
+                        loading="lazy"
+                        decoding="async"
+                        class="size-11 rounded-full border-2 border-surface-950 object-cover shadow-sm transition-transform hover:scale-110 dark:border-surface-50 xl:size-12"
+                      />
+                    ) : (
+                      <span class="grid size-11 place-items-center rounded-full bg-surface-950 font-mono-trip text-sm font-medium tabular-nums text-surface-50 shadow-sm transition-transform hover:scale-110 dark:bg-surface-50 dark:text-surface-950 xl:size-12">
+                        {player.data.number}
+                      </span>
+                    )}
+                    <span class="font-mono-trip text-[0.6rem] uppercase tracking-[0.12em] text-surface-950 dark:text-surface-50">
+                      {/* `||`, not `??`: an empty nickname is a blank label. */}
+                      {player.data.nickname || player.data.name}
+                    </span>
+                  </a>
+                ))}
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      {
+        bench.length > 0 && (
+          <p class="m-0 rounded-base border border-dashed border-surface-500/30 px-3.5 py-3 font-mono-trip text-xs opacity-60">
+            In panchina: {bench.map((member) => member.data.name).join(', ')}
+          </p>
+        )
+      }
+
+      {
+        /* Roster — same width as the pitch above it, so the page reads as one
+          column rather than a wide list under a narrow drawing. */
+      }
+      <ul class="m-0 mx-auto grid max-w-xl list-none gap-3 p-0">
+        {
+          members.map((member) => {
+            const Bio = bios.get(member.id)!;
+            const hasBio = Boolean(member.rendered?.html?.trim());
+            return (
+              <li
+                id={memberSlug(member)}
+                class="card preset-filled-surface-100-900 flex scroll-mt-20 flex-col gap-4 border border-surface-300-700 p-5 transition-colors hover:border-primary-500/55"
+              >
+                <div class="flex items-center gap-4">
+                  <span class="relative shrink-0">
+                    {member.data.photo ? (
+                      <img
+                        src={`${base}team/${member.data.photo}`}
+                        alt={member.data.name}
+                        loading="lazy"
+                        decoding="async"
+                        class="size-20 rounded-full border border-surface-300-700 object-cover"
+                      />
+                    ) : (
+                      <span
+                        class="grid size-20 place-items-center rounded-full border border-dashed border-surface-500/30"
+                        aria-hidden="true"
+                      >
+                        <UserRound size={30} class="opacity-25" />
+                      </span>
+                    )}
+
+                    {/* Same inverted roundel as the markers on the pitch, so the
+                        two views are recognisably about the same nine people. */}
+                    <span class="absolute -bottom-0.5 -right-0.5 grid size-7 place-items-center rounded-full border-2 border-surface-100-900 bg-surface-950 font-mono-trip text-[0.68rem] font-medium tabular-nums text-surface-50 dark:bg-surface-50 dark:text-surface-950">
+                      {member.data.number}
+                    </span>
+                  </span>
+
+                  <div class="flex min-w-0 flex-col gap-1">
+                    <span class="font-display text-3xl leading-none tracking-[0.04em] text-surface-950 dark:text-surface-50">
+                      {member.data.name}
+                    </span>
+                    {member.data.nickname && (
+                      <span class="font-mono-trip text-[0.62rem] uppercase leading-none tracking-[0.16em] text-primary-700 dark:text-primary-300">
+                        {member.data.nickname}
+                      </span>
+                    )}
+                    {member.data.role && (
+                      <span class="text-sm leading-snug opacity-70">{member.data.role}</span>
+                    )}
+                  </div>
+                </div>
+
+                {hasBio && (
+                  <div class="border-t border-surface-500/20 pt-3 text-sm leading-relaxed [&>p]:m-0">
+                    <Bio />
+                  </div>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>

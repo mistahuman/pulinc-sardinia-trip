@@ -1,5 +1,5 @@
 ---
-import { CalendarDays, Pin, Route } from 'lucide-svelte';
+import { CalendarDays, Images, Pin, Route, Users } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
 import Hero from '@components/trip/Hero.astro';
 import ViewLink from '@components/trip/ViewLink.astro';
@@ -10,6 +10,8 @@ const base = import.meta.env.BASE_URL;
 const views = [
   { href: `${base}itinerario`, label: 'Itinerario', icon: Route },
   { href: `${base}calendario`, label: 'Calendario', icon: CalendarDays },
+  { href: `${base}galleria`, label: 'Galleria', icon: Images },
+  { href: `${base}squadra`, label: 'Squadra', icon: Users },
   { href: `${base}bacheca`, label: 'Bacheca', icon: Pin },
 ];
 ---
