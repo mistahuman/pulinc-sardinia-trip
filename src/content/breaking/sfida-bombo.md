@@ -1,3 +1,3 @@
 ---
-text: 'TUTTI si chiedono se lo zio riuscirà a scopare'
+text: 'TUTTI si chiedono se lo zio ce la farà'
 ---
