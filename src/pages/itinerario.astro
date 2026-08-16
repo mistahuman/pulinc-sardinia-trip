@@ -84,6 +84,7 @@ const rendered = new Map(
                             infoLink={event.data.infoLink}
                             notes={event.data.notes}
                             hasBody={hasBody}
+                            tentative={event.data.tentative}
                           >
                             {hasBody && <Content />}
                           </EventCard>

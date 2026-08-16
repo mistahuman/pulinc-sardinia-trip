@@ -15,6 +15,8 @@ interface Props {
   infoLink?: string;
   notes?: string;
   hasBody?: boolean;
+  /** Still up in the air — dashed card, badge next to the title. */
+  tentative?: boolean;
 }
 
 const {
@@ -28,6 +30,7 @@ const {
   infoLink,
   notes,
   hasBody = false,
+  tentative = false,
 } = Astro.props;
 
 const meta = EVENT_META[type];
@@ -53,7 +56,10 @@ const rows = [
 
 <Tag
   id={anchor}
-  class="group card preset-filled-surface-100-900 border border-surface-300-700 overflow-hidden scroll-mt-24 transition-colors hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)] target:border-[color-mix(in_oklab,var(--accent)_75%,transparent)]"
+  class:list={[
+    'group card preset-filled-surface-100-900 overflow-hidden scroll-mt-24 transition-colors hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)] target:border-[color-mix(in_oklab,var(--accent)_75%,transparent)]',
+    tentative ? 'border border-dashed border-surface-500/40' : 'border border-surface-300-700',
+  ]}
   style={`--accent: ${accent}`}
 >
   <SummaryTag
@@ -69,10 +75,19 @@ const rows = [
 
     <!-- Title block -->
     <span class="flex min-w-0 flex-1 flex-col gap-0.5">
-      <span
-        class="accent-text font-mono-trip text-[0.62rem] uppercase tracking-[0.16em] leading-none"
-      >
-        {meta.label}
+      <span class="flex items-center gap-1.5">
+        <span
+          class="accent-text font-mono-trip text-[0.62rem] uppercase tracking-[0.16em] leading-none"
+        >
+          {meta.label}
+        </span>
+        {
+          tentative && (
+            <span class="rounded-base border border-dashed border-surface-500/40 px-1.5 py-0.5 font-mono-trip text-[0.55rem] uppercase leading-none tracking-[0.1em] text-surface-500">
+              In forse
+            </span>
+          )
+        }
       </span>
       <span class="font-semibold leading-snug text-pretty">{title}</span>
     </span>

@@ -58,8 +58,15 @@ const itinerary = `${import.meta.env.BASE_URL}itinerario`;
                             <span class="sr-only">{meta.label}</span>
                           </span>
                           <span class="min-w-0 flex-1">
-                            <span class="block text-sm leading-snug group-hover:underline">
-                              {event.data.shortTitle ?? event.data.title}
+                            <span class="flex items-center gap-1.5">
+                              <span class="block text-sm leading-snug group-hover:underline">
+                                {event.data.shortTitle ?? event.data.title}
+                              </span>
+                              {event.data.tentative && (
+                                <span class="shrink-0 rounded-base border border-dashed border-surface-500/40 px-1 py-px font-mono-trip text-[0.5rem] uppercase leading-none tracking-[0.1em] text-surface-500">
+                                  Forse
+                                </span>
+                              )}
                             </span>
                             {start && (
                               <span class="mt-0.5 block font-mono-trip text-[0.68rem] tabular-nums opacity-55">

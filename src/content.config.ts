@@ -25,6 +25,9 @@ const itinerary = defineCollection({
     mapsLink: z.string().optional(),
     infoLink: z.string().optional(),
     notes: z.string().optional(),
+    // Still up in the air — a plan, not a booking. Renders as a dashed card
+    // with an "In forse" badge instead of a solid one.
+    tentative: z.boolean().optional(),
   }),
 });
 
