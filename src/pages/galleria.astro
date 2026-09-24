@@ -3,11 +3,13 @@ import Layout from '@layouts/Layout.astro';
 import Polaroid from '@components/trip/Polaroid.astro';
 import { dayParts } from '@lib/eventMeta';
 import { loadGallery, photoUrl, tilt } from '@lib/gallery';
+import { loadSnapshots } from '@lib/snapshots';
 import { TRIP_RANGE } from '@lib/trip';
 
 const base = import.meta.env.BASE_URL;
 const days = await loadGallery();
-const total = days.reduce((sum, day) => sum + day.filled, 0);
+const snapshots = await loadSnapshots();
+const total = days.reduce((sum, day) => sum + day.filled, 0) + snapshots.length;
 ---
 
 <Layout title="Galleria · PULINC Sardinia Trip" description={`Le foto del viaggio, ${TRIP_RANGE}.`}>
@@ -58,6 +60,25 @@ const total = days.reduce((sum, day) => sum + day.filled, 0);
           })
         }
       </ol>
+
+      {
+        snapshots.length > 0 && (
+          <div class="mt-12">
+            <h2 class="mb-4 font-mono-trip text-[0.68rem] uppercase tracking-[0.2em] text-primary-700 dark:text-primary-300">
+              Senza data
+            </h2>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
+              {snapshots.map((photo, index) => (
+                <Polaroid
+                  src={photoUrl(base, photo.src)}
+                  alt={photo.alt || photo.caption || ''}
+                  tilt={tilt(0, index)}
+                />
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </section>
 </Layout>
