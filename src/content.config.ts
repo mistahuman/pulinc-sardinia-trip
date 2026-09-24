@@ -48,33 +48,8 @@ const breaking = defineCollection({
   }),
 });
 
-// One file per day, named YYYY-MM-DD.md. A day with no file is not a hole: the
-// gallery walks the whole trip anyway and fills the row with placeholders, so
-// adding photos is dropping files in, never editing the page.
-const gallery = defineCollection({
-  loader: glob({ base: './src/content/gallery', pattern: '**/*.md' }),
-  schema: z.object({
-    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD'),
-    photos: z
-      .array(
-        z.object({
-          // File under public/photos/ — the page builds the URL from BASE_URL.
-          src: z.string(),
-          // Written on the white border. Keep it to a line: it is a polaroid,
-          // not a caption block. A print with nothing written on it is fine.
-          caption: z.string().optional(),
-          // Description for anyone who can't see the photo. Falls back to the
-          // caption, which is usually close enough and always better than none.
-          alt: z.string().optional(),
-        }),
-      )
-      .default([]),
-  }),
-});
-
-// Photos with no known day — same shape as a gallery day's photos, minus the
-// date. They render on the bacheca instead of a /galleria row, so a print
-// nobody can place on the timeline still has somewhere to live.
+// The whole /galleria: no per-day split, since photos never come in with a
+// day attached — just a flat set of prints.
 const snapshots = defineCollection({
   loader: glob({ base: './src/content/snapshots', pattern: '**/*.md' }),
   schema: z.object({
@@ -109,4 +84,4 @@ const team = defineCollection({
   }),
 });
 
-export const collections = { itinerary, challenges, breaking, gallery, team, snapshots };
+export const collections = { itinerary, challenges, breaking, team, snapshots };

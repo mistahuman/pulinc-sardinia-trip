@@ -29,24 +29,25 @@ label, icon and colour for each are in `src/lib/eventMeta.ts`.
 
 ### Other collections
 
-- `gallery` — one file per day, `YYYY-MM-DD.md`, listing `photos` (`src` + optional
-  `caption` and `alt`) that live in `public/photos/`. `caption` is the line written
-  on the polaroid's white border; `alt` is the description for anyone who can't see
-  the photo and falls back to the caption. They are kept apart on purpose — one is
-  visible text, the other is not, and a single field cannot be both well. `/galleria` walks the whole trip and pads
-  every day to three slots, so a missing file is not a hole: it is three empty
-  frames. Adding photos never means touching the page.
+- `snapshots` — the whole `/galleria`, in a flat list of `photos` (`src` +
+  optional `alt`) that live in `public/photos/`. Photos never come in with a day
+  attached, so there is no per-day split and no timeline: any number of files
+  under `src/content/snapshots/` can each list any number of photos, and
+  `loadSnapshots()` in `src/lib/snapshots.ts` flattens them all for the page.
+  No `caption` field — a print with text on its border implied an order that
+  doesn't exist here, so the border stays blank. `alt` is still worth writing:
+  it is the only description anyone who can't see the photo gets.
 
-  It deliberately does **not** reuse the itinerary's rail — it is an album, not a
-  plan: prints in white polaroid frames, leaning a degree or two. The lean comes
-  from `tilt()` in `src/lib/gallery.ts`, a fixed ring indexed by day and slot, not
-  `Math.random()`: a random tilt is re-rolled on every build and the album would
-  rearrange itself between deploys.
+  It deliberately does **not** reuse the itinerary's rail — it is an album, not
+  a plan: prints in white polaroid frames. Unlike a dated album they are not
+  tilted — no known order to read them "dropped on a table" in, so a lean would
+  just look random.
 
-  The frame itself is `src/components/trip/Polaroid.astro`. No `src` means an empty
-  frame, so one component covers both a print and a slot nobody has filled. It
-  stays light in dark mode on purpose (`bg-surface-50` is a fixed light token, not
-  a mode-aware pair) — a polaroid is a white object, not a themed surface.
+  The frame itself is `src/components/trip/Polaroid.astro`. No `src` means an
+  empty frame, so one component covers both a print and a slot nobody has
+  filled. It stays light in dark mode on purpose (`bg-surface-50` is a fixed
+  light token, not a mode-aware pair) — a polaroid is a white object, not a
+  themed surface.
 
 - `team` — one file per member (`name`, optional `nickname` `photo` `number`
   `position`). We travel nine, so the **Squadra** section of the bacheca draws them
@@ -68,12 +69,11 @@ label, icon and colour for each are in `src/lib/eventMeta.ts`.
   but nothing reads them. Fill them in and they stay invisible until something
   renders them again.
 
-`gallery` and `team` both ship with a commented example file that documents the
-format — keep it.
+`team` ships with a commented example file that documents the format — keep it.
 
 ## Images
 
-`public/photos/` (gallery) and `public/team/` (faces) are served as-is — there is no
+`public/photos/` (galleria) and `public/team/` (faces) are served as-is — there is no
 Astro image pipeline here, so nothing resizes or re-encodes on build and whatever is
 committed is what visitors download. A phone shot is 3-5 MB and 4000px wide against
 a gallery that draws it at ~280px.
@@ -88,7 +88,7 @@ npm run photos -- public/team
 `scripts/photos.sh` shrinks the long side to 1200px, re-encodes as JPEG q82 and
 strips the metadata. It is safe to re-run — a file that is already a small enough
 `.jpg` is skipped rather than compressed a second time. It renames to `.jpg` and
-prints what it renamed, because `src` in the gallery files has to follow.
+prints what it renamed, because `src` in the snapshots files has to follow.
 
 Requires ImageMagick (`convert`). It reads iPhone HEIC. **`-auto-orient` runs before
 `-strip` and the order is load-bearing**: phones leave the pixels sideways and record

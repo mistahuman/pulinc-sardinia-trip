@@ -1,8 +1,7 @@
 ---
-# Foto senza un giorno preciso a cui agganciarle — vivono in una riga a parte
-# nella /galleria invece che nella riga di un giorno. Stesso formato di
-# src/content/gallery: `src` sta sotto public/photos/. Niente `caption` per
-# queste: `alt` resta solo per l'accessibilità, non compare a schermo.
+# Le foto della /galleria, tutte in un elenco piatto — niente giorni. `src`
+# sta sotto public/photos/. Niente `caption`: `alt` resta solo per
+# l'accessibilità, non compare a schermo.
 photos:
   - src: 'scogliera-capo-caccia.jpg'
     alt: 'Scogliera a Capo Caccia'
