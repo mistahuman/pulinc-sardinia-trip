@@ -4,8 +4,11 @@ import { MapPin, Square, SquareCheckBig, SquareX } from 'lucide-svelte';
 import Layout from '@layouts/Layout.astro';
 import Section from '@components/generic/Section.astro';
 import Pitch from '@components/trip/Pitch.astro';
+import Polaroid from '@components/trip/Polaroid.astro';
 import { CREST_SIZE, CRESTS, crestUrl } from '@lib/crests';
+import { photoUrl, tilt } from '@lib/gallery';
 import { spotifyEmbedUrl } from '@lib/spotify';
+import { loadSnapshots } from '@lib/snapshots';
 import { loadTeam } from '@lib/team';
 
 const base = import.meta.env.BASE_URL;
@@ -46,6 +49,7 @@ const PLAYLIST_URL = 'https://open.spotify.com/playlist/3vcAqoGdOcI874WReVtEim?s
 const playlistEmbed = spotifyEmbedUrl(PLAYLIST_URL);
 
 const { rows, bench, formation } = await loadTeam();
+const snapshots = await loadSnapshots();
 ---
 
 <Layout title="Bacheca · PULINC" description="La bacheca dei Pulinc.">
@@ -71,6 +75,23 @@ const { rows, bench, formation } = await loadTeam();
       <Section title="Squadra" note={formation}>
         <Pitch rows={rows} bench={bench} />
       </Section>
+
+      {
+        snapshots.length > 0 && (
+          <Section title="Foto" note={`${snapshots.length}`}>
+            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
+              {snapshots.map((photo, index) => (
+                <Polaroid
+                  src={photoUrl(base, photo.src)}
+                  caption={photo.caption}
+                  alt={photo.alt || photo.caption || ''}
+                  tilt={tilt(0, index)}
+                />
+              ))}
+            </div>
+          </Section>
+        )
+      }
 
       <Section title="Playlist">
         {

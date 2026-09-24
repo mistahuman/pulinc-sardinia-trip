@@ -72,6 +72,24 @@ const gallery = defineCollection({
   }),
 });
 
+// Photos with no known day — same shape as a gallery day's photos, minus the
+// date. They render on the bacheca instead of a /galleria row, so a print
+// nobody can place on the timeline still has somewhere to live.
+const snapshots = defineCollection({
+  loader: glob({ base: './src/content/snapshots', pattern: '**/*.md' }),
+  schema: z.object({
+    photos: z
+      .array(
+        z.object({
+          src: z.string(),
+          caption: z.string().optional(),
+          alt: z.string().optional(),
+        }),
+      )
+      .default([]),
+  }),
+});
+
 export const POSITIONS = ['gk', 'def', 'mid', 'att'] as const;
 
 // We travel nine, which is a squad, so the roster is a squad sheet: a number, a
@@ -91,4 +109,4 @@ const team = defineCollection({
   }),
 });
 
-export const collections = { itinerary, challenges, breaking, gallery, team };
+export const collections = { itinerary, challenges, breaking, gallery, team, snapshots };
