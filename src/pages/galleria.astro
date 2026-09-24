@@ -68,12 +68,8 @@ const total = days.reduce((sum, day) => sum + day.filled, 0) + snapshots.length;
               Senza data
             </h2>
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-              {snapshots.map((photo, index) => (
-                <Polaroid
-                  src={photoUrl(base, photo.src)}
-                  alt={photo.alt || photo.caption || ''}
-                  tilt={tilt(0, index)}
-                />
+              {snapshots.map((photo) => (
+                <Polaroid src={photoUrl(base, photo.src)} alt={photo.alt || photo.caption || ''} />
               ))}
             </div>
           </div>
