@@ -15,8 +15,12 @@ npm run format
 ## Content model
 
 One markdown file per stop in `src/content/itinerary/`, named `YYYY-MM-DD-slug.md`.
-Itinerary and calendar read the same files, so a single file updates both views.
 Days with nothing planned still render as "Chill". Trip dates live in `src/lib/trip.ts`.
+
+There used to be a `/calendario` page — a compact grid over the same days, next to
+`/itinerario`'s detailed rail. Dropped after the trip: once nothing changes day to
+day anymore, showing the same events twice added nothing. `loadItinerary()` in
+`src/lib/trip.ts` is unchanged; only the second view is gone.
 
 Required frontmatter: `date`, `type`, `title`. Optional: `time`, `location`,
 `address`, `mapsLink`, `infoLink`, `notes`.
